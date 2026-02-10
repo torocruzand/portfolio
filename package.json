@@ -62,7 +62,7 @@
     "@astrojs/check": "^0.9.3",
     "@astrojs/react": "^3.4.0",
     "@astrojs/sitemap": "^3.2.2",
-    "@astrojs/tailwind": "^0.4.1",
+    "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^22",
     "@types/react": "^19",
