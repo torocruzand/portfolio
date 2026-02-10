@@ -1,5 +1,3 @@
-"use client"
-
 import { motion } from "framer-motion"
 import { fadeInUp, lineReveal } from "@/lib/animations"
 

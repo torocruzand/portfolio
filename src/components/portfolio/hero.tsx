@@ -1,5 +1,3 @@
-"use client"
-
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useI18n } from "@/lib/i18n"
 import { ArrowDown } from "lucide-react"
