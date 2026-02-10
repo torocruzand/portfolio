@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
+// import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [
     react(),
     tailwind(),
-    sitemap(),
+    // sitemap(),
   ],
   
   // GitHub Pages configuration
@@ -19,5 +19,14 @@ export default defineConfig({
   // Image optimization
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
+  },
+  
+  // Path aliases
+  vite: {
+    resolve: {
+      alias: {
+        '@': new URL('./src/', import.meta.url).pathname,
+      },
+    },
   },
 });

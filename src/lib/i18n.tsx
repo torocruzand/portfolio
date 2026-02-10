@@ -1,5 +1,3 @@
-"use client"
-
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react"
 
 export type Locale = "en" | "es" | "pt"
@@ -312,6 +310,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 }
 
 export function useI18n() {
+  // During server-side rendering, return a default context
+  if (typeof window === 'undefined') {
+    return {
+      locale: 'en' as Locale,
+      setLocale: () => {},
+      t: (key: string) => key,
+    }
+  }
+  
   const context = useContext(I18nContext)
   if (!context) {
     throw new Error("useI18n must be used within an I18nProvider")

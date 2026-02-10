@@ -1,6 +1,7 @@
 ---
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { I18nProvider } from '@/lib/i18n';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<'html'> {
@@ -31,7 +32,9 @@ const {
   </head>
   <body>
     <ThemeProvider client:load>
-      <slot />
+      <I18nProvider client:load>
+        <slot />
+      </I18nProvider>
     </ThemeProvider>
   </body>
 </html>
