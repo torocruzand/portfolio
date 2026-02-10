@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { useI18n } from "@/lib/i18n"
 import { fadeInUp } from "@/lib/animations"
@@ -120,12 +119,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-500 hover:border-accent/20 hover:shadow-xl hover:shadow-accent/5">
         {/* Project image */}
         <div className="relative h-56 overflow-hidden sm:h-64">
-          <Image
+          <img
             src={project.image || "/placeholder.svg"}
             alt={t(project.titleKey)}
-            fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
           {/* Overlay on hover */}
           <motion.div

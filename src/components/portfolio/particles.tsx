@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
-import { useTheme } from "next-themes"
+import { useEffect, useRef, useCallback, useState } from "react"
 
 interface Particle {
   x: number
@@ -18,7 +17,28 @@ export function Particles() {
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const animFrameRef = useRef<number>(0)
-  const { theme } = useTheme()
+  const [theme, setTheme] = useState<string>("light")
+
+  // Initialize theme from localStorage or system preference
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme")
+      if (savedTheme) {
+        setTheme(savedTheme)
+      } else {
+        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+        setTheme(isDark ? "dark" : "light")
+      }
+
+      // Listen for theme changes
+      const handleStorageChange = () => {
+        const newTheme = localStorage.getItem("theme") || "light"
+        setTheme(newTheme)
+      }
+      window.addEventListener("storage", handleStorageChange)
+      return () => window.removeEventListener("storage", handleStorageChange)
+    }
+  }, [])
 
   const initParticles = useCallback((width: number, height: number) => {
     const count = Math.min(Math.floor((width * height) / 18000), 80)
