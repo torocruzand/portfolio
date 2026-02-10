@@ -1,0 +1,33 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { Navigation } from '@/components/portfolio/navigation';
+import { Hero } from '@/components/portfolio/hero';
+import { About } from '@/components/portfolio/about';
+import { Projects } from '@/components/portfolio/projects';
+import { Skills } from '@/components/portfolio/skills';
+import { Experience } from '@/components/portfolio/experience';
+import { Contact } from '@/components/portfolio/contact';
+import { Footer } from '@/components/portfolio/footer';
+import { CustomCursor } from '@/components/portfolio/custom-cursor';
+import { Particles } from '@/components/portfolio/particles';
+import { ScrollProgress } from '@/components/portfolio/scroll-progress';
+import { I18nProvider } from '@/lib/i18n';
+---
+
+<Layout>
+  <I18nProvider client:load>
+    <CustomCursor client:load />
+    <Particles client:load />
+    <ScrollProgress client:load />
+    <Navigation client:load />
+    <main class="relative z-10">
+      <Hero client:load />
+      <About client:load />
+      <Projects client:load />
+      <Skills client:load />
+      <Experience client:load />
+      <Contact client:load />
+    </main>
+    <Footer client:load />
+  </I18nProvider>
+</Layout>

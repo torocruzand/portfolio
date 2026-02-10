@@ -1,0 +1,52 @@
+---
+import '@/styles/globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import type { HTMLAttributes } from 'react';
+
+interface Props extends HTMLAttributes<'html'> {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Andrés | Full-Stack Developer & Technology Educator',
+  description = 'Full-Stack Software Developer passionate about creating innovative cross-platform and web solutions. Over a decade of experience in development and education.',
+  ...rest
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" suppressHydrationWarning {...rest}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f7f4f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f0f11" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <ThemeProvider client:load>
+      <slot />
+    </ThemeProvider>
+  </body>
+</html>
+
+<style>
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  :global(::selection) {
+    background-color: hsl(16 80% 52% / 0.2);
+    color: hsl(var(--foreground));
+  }
+
+  :global(body) {
+    font-family: 'Inter', sans-serif;
+  }
+</style>
