@@ -266,7 +266,7 @@ const projects = [
     {
         name: "PhotonJSON: JSON library for LiveCode language",
         description: "LiveCode script library for working with JSON, written in livecode-script and without the use of external",
-        image: "https://torocruzand.com/images/projects/photon-json.jpg",
+        image: "images/projects/photon-json.jpg",
         web: "",
         download: "https://github.com/Ferruslogic/PhotonJSON/archive/refs/tags/v1.2.4.zip",
         github: "https://github.com/Ferruslogic/PhotonJSON/",
@@ -276,7 +276,7 @@ const projects = [
     {
         name: "Drag Drop file into IDE of LiveCode",
         description: "This plugin allows you to drag image, video, SVG and plain text files and import them into any of the LiveCode IDE's open windows",
-        image: "https://torocruzand.com/images/projects/drag-drop-lc-ide.jpg",
+        image: "images/projects/drag-drop-ide.jpg",
         web: "",
         download: "https://github.com/Ferruslogic/frlDragDropFilesIntoIDE/archive/refs/tags/v1.1.1.zip",
         github: "https://github.com/Ferruslogic/frlDragDropFilesIntoIDE/",
@@ -286,7 +286,7 @@ const projects = [
     {
         name: "TinyColor for LiveCode",
         description: "This LiveCode Script library is based on Brian Grinstead's TinyColor v1.4.2 micro-framework. Which was translated into LiveCode Script by the FerrusLogic team",
-        image: "https://torocruzand.com/images/projects/tiny-color.jpg",
+        image: "images/projects/tiny-color.jpg",
         web: "",
         download: "https://github.com/Ferruslogic/TinyColor/archive/refs/tags/v1.0.0.zip",
         github: "https://github.com/Ferruslogic/TinyColor",
@@ -296,7 +296,7 @@ const projects = [
     {
         name: "touchGestures",
         description: "This LiveCode Script library is  Library for handling finger gestures on a screen",
-        image: "https://torocruzand.com/images/projects/touch-gestures.jpg",
+        image: "images/projects/touch-gestures.jpg",
         web: "",
         download: "",
         github: "https://github.com/Ferruslogic/touchGestures",
@@ -306,7 +306,7 @@ const projects = [
     {
         name: "DevGuides",
         description: "Extension to help LiveCode developers to design the UI",
-        image: "https://torocruzand.com/images/projects/dev-guides.jpg",
+        image: "images/projects/dev-guides.jpg",
         web: "",
         download: "https://github.com/Ferruslogic/DevGuides/archive/refs/tags/v1.0.6.zip",
         github: "https://github.com/Ferruslogic/DevGuides",
@@ -316,7 +316,7 @@ const projects = [
     {
         name: "Accreditation of the University of Pedagogical Sciences of Holguin",
         description: 'Product that collects the internal life of the University of Pedagogical Sciences "José de la Luz y Caballero"',
-        image: "https://torocruzand.com/images/projects/accreditation.jpg",
+        image: "images/projects/accreditation-uho.jpg",
         web: "https://cesoftad.uho.edu.cu/producto/123",
         download: "",
         github: "",
@@ -326,7 +326,7 @@ const projects = [
     {
         name: "University of Holguin Forum Platform",
         description: "University of Holguin Forum Platform. Here I helped in the deployment and support of this platform",
-        image: "https://torocruzand.com/images/projects/forum-uho.jpg",
+        image: "images/projects/forum-uho.jpg",
         web: "https://foros.uho.edu.cu/",
         download: "",
         github: "",
@@ -336,7 +336,7 @@ const projects = [
     {
         name: "Dictionary of Marti's Thought",
         description: "This mobile application presents the enriched and contextualized content of the writer Ramiro Valdéz Galarraga",
-        image: "https://torocruzand.com/images/projects/DPM.jpg",
+        image: "images/projects/DPM.jpg",
         web: "https://cesoftad.uho.edu.cu/producto/168",
         download: "",
         github: "",
