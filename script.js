@@ -386,7 +386,7 @@ function registerServiceWorker() {
 // Theme Management
 // ========================================
 function initTheme() {
-    const themeToggle = document.querySelector('.theme-toggle');
+    const themeToggles = document.querySelectorAll('.theme-toggle');
     
     // Apply saved theme
     if (isDarkMode) {
@@ -396,10 +396,12 @@ function initTheme() {
     }
     
     // Theme toggle handler
-    themeToggle.addEventListener('click', () => {
-        isDarkMode = !isDarkMode;
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', isDarkMode);
+    themeToggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        });
     });
 }
 
