@@ -565,6 +565,8 @@ body:not(.dark-mode) .moon-icon {
 .section {
     padding: var(--section-padding) 0;
     position: relative;
+    content-visibility: auto;
+    contain-intrinsic-size: 900px;
 }
 
 .section-header {
