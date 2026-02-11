@@ -410,26 +410,29 @@ function initTheme() {
 // ========================================
 function initLanguage() {
     const langButtons = document.querySelectorAll('.lang-btn');
+
+    const setActiveLanguage = () => {
+        langButtons.forEach(button => {
+            button.classList.toggle('active', button.dataset.lang === currentLang);
+        });
+    };
     
     // Set active language button
     langButtons.forEach(btn => {
-        if (btn.dataset.lang === currentLang) {
-            btn.classList.add('active');
-        }
-        
         // Language button click handler
         btn.addEventListener('click', () => {
             currentLang = btn.dataset.lang;
             localStorage.setItem('preferredLanguage', currentLang);
             
             // Update active state
-            langButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            setActiveLanguage();
             
             // Update translations
             updateTranslations();
         });
     });
+
+    setActiveLanguage();
     
     // Initial translation
     updateTranslations();

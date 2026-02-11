@@ -276,6 +276,12 @@ body:not(.dark-mode) .moon-icon {
     align-self: center;
 }
 
+@media (min-width: 951px) {
+    .mobile-nav-controls {
+        display: none !important;
+    }
+}
+
 /* ========================================
    Hero Section
    ======================================== */
