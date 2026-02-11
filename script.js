@@ -361,10 +361,26 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initSmoothScroll();
     renderProjects();
+    registerServiceWorker();
     
     // Update active nav link on scroll
     window.addEventListener('scroll', updateActiveNavLink);
 });
+
+// ========================================
+// PWA Service Worker
+// ========================================
+function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
+
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch(() => {
+            // Fail silently if registration fails
+        });
+    });
+}
 
 // ========================================
 // Theme Management
