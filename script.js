@@ -376,8 +376,31 @@ function registerServiceWorker() {
     }
 
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').catch(() => {
+        navigator.serviceWorker.register('service-worker.js').then((registration) => {
+            registration.update();
+
+            if (registration.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                if (!newWorker) {
+                    return;
+                }
+
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                });
+            });
+        }).catch(() => {
             // Fail silently if registration fails
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.reload();
         });
     });
 }
@@ -386,22 +409,26 @@ function registerServiceWorker() {
 // Theme Management
 // ========================================
 function initTheme() {
-    const themeToggles = document.querySelectorAll('.theme-toggle');
-    
-    // Apply saved theme
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-    }
-    
-    // Theme toggle handler
-    themeToggles.forEach((toggle) => {
-        toggle.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode);
+    const applyTheme = () => {
+        document.body.classList.toggle('dark-mode', isDarkMode);
+        document.querySelectorAll('.theme-toggle').forEach((toggle) => {
+            toggle.setAttribute('aria-pressed', String(isDarkMode));
         });
+    };
+
+    // Apply saved theme
+    applyTheme();
+
+    // Theme toggle handler (event delegation for reliability)
+    document.addEventListener('click', (event) => {
+        const toggle = event.target.closest('.theme-toggle');
+        if (!toggle) {
+            return;
+        }
+
+        isDarkMode = !isDarkMode;
+        localStorage.setItem('darkMode', isDarkMode);
+        applyTheme();
     });
 }
 

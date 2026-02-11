@@ -1,5 +1,5 @@
-const CACHE_NAME = 'portfolio-cache-v2';
-const IMAGE_CACHE = 'portfolio-images-v1';
+const CACHE_NAME = 'portfolio-cache-v3';
+const IMAGE_CACHE = 'portfolio-images-v2';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -23,6 +23,12 @@ self.addEventListener('install', (event) => {
   );
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
@@ -40,6 +46,19 @@ self.addEventListener('fetch', (event) => {
   }
 
   const requestUrl = new URL(event.request.url);
+
+  if (requestUrl.pathname.endsWith('.js') || requestUrl.pathname.endsWith('.css')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   if (event.request.destination === 'image') {
     event.respondWith(
