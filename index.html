@@ -211,7 +211,7 @@
                         <div class="profile-image">
                             <!-- Replace this src with your actual profile photo -->
                             <img src="images/profile.png"
-                                alt="Andrés Profile" class="profile-photo" width="280" height="280" loading="eager"
+                                alt="Andrés Profile" class="profile-photo" width="280" height="280" loading="eager" decoding="async" fetchpriority="high"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <!-- Fallback gradient circle -->
                             <div class="profile-fallback" style="display: none;">
