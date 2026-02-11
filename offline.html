@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <title>Offline | Torocruzand</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .offline-card {
+            max-width: 520px;
+            padding: 40px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .offline-card h1 {
+            font-size: 32px;
+            margin-bottom: 16px;
+            font-family: var(--font-heading);
+        }
+
+        .offline-card p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .offline-card a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="offline-card">
+        <h1>You’re offline</h1>
+        <p>It looks like you lost your connection. Please check your network and try again.</p>
+        <a href="/index.html">Back to home</a>
+    </div>
+</body>
+</html>

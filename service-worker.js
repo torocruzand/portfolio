@@ -1,7 +1,9 @@
-const CACHE_NAME = 'portfolio-cache-v1';
+const CACHE_NAME = 'portfolio-cache-v2';
+const IMAGE_CACHE = 'portfolio-images-v1';
 const CORE_ASSETS = [
   '/',
   '/index.html',
+  '/offline.html',
   '/styles.css',
   '/script.js',
   '/manifest.webmanifest',
@@ -25,7 +27,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
       .then((keys) => Promise.all(
-        keys.filter((key) => key !== CACHE_NAME)
+        keys.filter((key) => ![CACHE_NAME, IMAGE_CACHE].includes(key))
           .map((key) => caches.delete(key))
       ))
       .then(() => self.clients.claim())
@@ -37,9 +39,43 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const requestUrl = new URL(event.request.url);
+
+  if (event.request.destination === 'image') {
+    event.respondWith(
+      caches.open(IMAGE_CACHE).then((cache) =>
+        cache.match(event.request).then((cached) => {
+          if (cached) {
+            return cached;
+          }
+
+          return fetch(event.request)
+            .then((response) => {
+              cache.put(event.request, response.clone());
+              return response;
+            })
+            .catch(() => caches.match('/images/pwa-icon-192.svg'));
+        })
+      )
+    );
+    return;
+  }
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          return response;
+        })
+        .catch(() => caches.match('/offline.html'))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((cached) => cached || fetch(event.request))
-      .catch(() => caches.match('/index.html'))
   );
 });

@@ -564,7 +564,7 @@ function renderProjects() {
         return `
             <div class="project-card" style="animation-delay: ${index * 0.1}s">
                 <img src="${project.image}" alt="${project.name}" class="project-image" 
-                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\'%3E%3Crect fill=\\'%23667eea\\' width=\\'400\\' height=\\'300\\'/%3E%3Ctext fill=\\'white\\' font-family=\\'Arial\\' font-size=\\'24\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3E${project.name.substring(0, 20)}%3C/text%3E%3C/svg%3E'">
+                         loading="lazy" width="400" height="220" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\'%3E%3Crect fill=\\'%23667eea\\' width=\\'400\\' height=\\'300\\'/%3E%3Ctext fill=\\'white\\' font-family=\\'Arial\\' font-size=\\'24\\' x=\\'50%25\\' y=\\'50%25\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'%3E${project.name.substring(0, 20)}%3C/text%3E%3C/svg%3E'">
                 <div class="project-content">
                     <h3 class="project-title">${project.name}</h3>
                     <p class="project-description">${project.description}</p>
