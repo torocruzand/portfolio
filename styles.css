@@ -258,6 +258,24 @@ body:not(.dark-mode) .moon-icon {
     transition: var(--transition-smooth);
 }
 
+/* Mobile Menu Controls */
+.mobile-nav-controls {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+.mobile-nav-controls .language-switcher {
+    justify-content: center;
+}
+
+.mobile-nav-controls .theme-toggle {
+    align-self: center;
+}
+
 /* ========================================
    Hero Section
    ======================================== */
@@ -504,7 +522,7 @@ body:not(.dark-mode) .moon-icon {
 /* Scroll Indicator */
 .scroll-indicator {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     animation: bounce 2s infinite;
@@ -1217,9 +1235,17 @@ body:not(.dark-mode) .moon-icon {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 950px) {
     :root {
         --section-padding: 60px;
+    }
+
+    .nav-container {
+        padding: 16px 18px;
+    }
+
+    .logo {
+        font-size: 20px;
     }
     
     .nav-links {
@@ -1243,6 +1269,15 @@ body:not(.dark-mode) .moon-icon {
         opacity: 1;
         visibility: visible;
     }
+
+    .nav-controls .language-switcher,
+    .nav-controls .theme-toggle {
+        display: none;
+    }
+
+    .nav-links.active .mobile-nav-controls {
+        display: flex;
+    }
     
     .mobile-menu-toggle {
         display: flex;
@@ -1261,7 +1296,11 @@ body:not(.dark-mode) .moon-icon {
     }
     
     .hero {
-        padding: 100px 0 60px;
+        padding: 100px 0 90px;
+    }
+
+    .hero-social {
+        margin-bottom: 30px;
     }
     
     .projects-grid {
@@ -1298,6 +1337,10 @@ body:not(.dark-mode) .moon-icon {
 @media (max-width: 480px) {
     .nav-container {
         padding: 15px 20px;
+    }
+
+    .logo {
+        font-size: 20px;
     }
     
     .hero-title {
