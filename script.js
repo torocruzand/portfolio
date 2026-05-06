@@ -266,7 +266,7 @@ const projects = [
     {
         name: "PixelCrush",
         description: "A fast, cross-platform image compression and format conversion tool with a sleek UI built in Rust and Slint.",
-        image: "images/projects/pixelcrush.png",
+        image: "images/projects/pixelcrush.jpg",
         web: "https://torocruzand.github.io/PixelCrush",
         download: "https://github.com/torocruzand/PixelCrush/releases/latest",
         github: "https://github.com/torocruzand/PixelCrush",
