@@ -264,6 +264,16 @@ const translations = {
 // ========================================
 const projects = [
     {
+        name: "PixelCrush",
+        description: "A fast, cross-platform image compression and format conversion tool with a sleek UI built in Rust and Slint.",
+        image: "images/projects/pixelcrush.png",
+        web: "https://torocruzand.github.io/PixelCrush",
+        download: "https://github.com/torocruzand/PixelCrush/releases/latest",
+        github: "https://github.com/torocruzand/PixelCrush",
+        technologies: ["Rust", "Slint", "Image Processing"],
+        categories: ["Desktop App", "Utility"]
+    },
+    {
         name: "PhotonJSON: JSON library for LiveCode language",
         description: "LiveCode script library for working with JSON, written in livecode-script and without the use of external",
         image: "images/projects/photon-json.jpg",
