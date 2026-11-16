@@ -519,17 +519,31 @@
   }
 
   .hud-btn .led {
+    position: relative;
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: var(--ink-faint);
-    box-shadow: none;
-    transition: background var(--dur-fast), box-shadow var(--dur-fast);
+    transition: background var(--dur-fast);
+  }
+
+  /* Glow lives on a static shadow; only its opacity animates (GPU-composited). */
+  .hud-btn .led::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 8px var(--signal);
+    opacity: 0;
+    transition: opacity var(--dur-fast);
   }
 
   .hud-btn[aria-pressed="true"] .led {
     background: var(--signal);
-    box-shadow: 0 0 8px var(--signal);
+  }
+
+  .hud-btn[aria-pressed="true"] .led::after {
+    opacity: 1;
   }
 
   .hud-btn .label-long {

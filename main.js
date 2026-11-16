@@ -108,7 +108,7 @@ const store = {
 const state = {
   staticMode: motionQuery.matches,
   pointer: { x: -9999, y: -9999, vx: 0, vy: 0, inside: false },
-  scroll: { y: window.scrollY, v: 0 },
+  scroll: { y: 0, v: 0 }, // filled on the first frame: reading scrollY here forces a layout before styles apply
   viewport: { w: window.innerWidth, h: window.innerHeight },
   frame: { dt: 16.7, work: 0, fps: 60 },
 };
@@ -301,10 +301,12 @@ function initInput() {
     state.pointer.x = state.pointer.y = -9999;
   });
 
-  let lastScroll = window.scrollY;
+  // scrollY is read after the first frame: reading it at startup forces a synchronous layout.
+  let lastScroll = null;
+  requestAnimationFrame(() => { state.scroll.y = lastScroll ??= window.scrollY; });
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
-    state.scroll.v = clamp(state.scroll.v * 0.5 + (y - lastScroll), -120, 120);
+    state.scroll.v = clamp(state.scroll.v * 0.5 + (y - (lastScroll ?? y)), -120, 120);
     state.scroll.y = lastScroll = y;
   }, { passive: true });
 
@@ -1571,7 +1573,6 @@ class PWA {
 
 function registerServiceWorker() {
   navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then((reg) => {
-    reg.update();
     if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
     reg.addEventListener('updatefound', () => {
       const worker = reg.installing;
