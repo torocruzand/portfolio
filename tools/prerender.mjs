@@ -32,7 +32,11 @@ const SITE = 'https://torocruzand.com';
 
 // ---- Cache-busting stamp -------------------------------------------------
 const hash = createHash('sha256');
-for (const f of ['styles.css', 'main.js', 'i18n.js']) hash.update(readFileSync(join(ROOT, f)));
+// Icons and the manifest are in the hash too, so a new logo rotates the service worker's caches.
+for (const f of ['styles.css', 'main.js', 'i18n.js', 'manifest.webmanifest', 'images/favicon.svg', 'images/favicon.ico',
+  'images/apple-touch-icon.png', 'images/icon-192.png', 'images/icon-512.png', 'images/icon-maskable-512.png']) {
+  hash.update(readFileSync(join(ROOT, f)));
+}
 const V = hash.digest('hex').slice(0, 10);
 const stamp = (html) => html.replace(/(["'])\/(styles\.css|main\.js|i18n\.js)(?:\?v=[\w-]+)?\1/g, `$1/$2?v=${V}$1`);
 
