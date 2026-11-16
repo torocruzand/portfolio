@@ -4,7 +4,7 @@ Builds the CV in EN / ES / PT-BR as print-ready HTML (cv/src/cv-<lang>.html).
 Render to PDF with cv/render.sh (headless Chromium, A4, no headers/footers).
 
 Content rules: only information already public on torocruzand.com plus the
-employment history and education from the CV template. No phone number.
+employment history and education from the CV template. Phone included at the owner's request.
 """
 import html
 import pathlib
@@ -21,6 +21,7 @@ DATES = {
 }
 
 CONTACT = [
+    ('+55 (41) 9973-8831', 'tel:+554199738831'),
     ('torocruzand@gmail.com', 'mailto:torocruzand@gmail.com'),
     ('torocruzand.com', 'https://torocruzand.com'),
     ('github.com/torocruzand', 'https://github.com/torocruzand'),
@@ -78,7 +79,7 @@ T = {
             ('AI tools', 'Claude Code, OpenAI Codex, Google Gemini, Google Antigravity'),
             ('Practices', 'Agile (Scrum, Kanban), code review, mentoring, technical documentation, AI-augmented development'),
         ],
-        'langs': [('Spanish', 'Native'), ('English', 'Professional working proficiency'), ('Portuguese', 'Professional working proficiency')],
+        'langs': [('Spanish', 'Native'), ('English', 'Intermediate'), ('Portuguese', 'Intermediate')],
         'footer': 'References available on request',
     },
     'es': {
@@ -131,7 +132,7 @@ T = {
             ('Herramientas de IA', 'Claude Code, OpenAI Codex, Google Gemini, Google Antigravity'),
             ('Prácticas', 'Ágil (Scrum, Kanban), revisión de código, mentoría, documentación técnica, desarrollo asistido por IA'),
         ],
-        'langs': [('Español', 'Nativo'), ('Inglés', 'Competencia profesional'), ('Portugués', 'Competencia profesional')],
+        'langs': [('Español', 'Nativo'), ('Inglés', 'Intermedio'), ('Portugués', 'Intermedio')],
         'footer': 'Referencias disponibles bajo solicitud',
     },
     'pt': {
@@ -184,7 +185,7 @@ T = {
             ('Ferramentas de IA', 'Claude Code, OpenAI Codex, Google Gemini, Google Antigravity'),
             ('Práticas', 'Ágil (Scrum, Kanban), revisão de código, mentoria, documentação técnica, desenvolvimento assistido por IA'),
         ],
-        'langs': [('Espanhol', 'Nativo'), ('Inglês', 'Proficiência profissional'), ('Português', 'Proficiência profissional')],
+        'langs': [('Espanhol', 'Nativo'), ('Inglês', 'Intermediário'), ('Português', 'Intermediário')],
         'footer': 'Referências disponíveis mediante solicitação',
     },
 }
