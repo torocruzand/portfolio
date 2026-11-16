@@ -35,6 +35,20 @@ Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependenc
 - The EN / ES / PT switch in the header translates every `data-i18n` node, updates `<html lang>` and the title, and keeps `?lang=es|pt` in the URL. The choice is saved per visitor.
 - The site installs as an app (Install button or browser menu) and works fully offline once visited.
 
+### SEO
+
+- `/`, `/es/` and `/pt/` are real pages. `es/` and `pt/` are pre-rendered from `index.html` + `i18n.js` with translated text, `<html lang>`, title, description, a self-referencing canonical, and `og:locale` already in the HTML, so crawlers and link previews never depend on JavaScript.
+- `hreflang` alternates (plus `x-default`) are declared in every page and in `sitemap.xml`; `robots.txt` points to the sitemap.
+- Social cards use `images/og-image.png` (1200×630, `summary_large_image`). JSON-LD declares `Person`, `WebSite` and `ProfilePage`, with each public project.
+
+**After editing `index.html` or `i18n.js`, regenerate the language pages:**
+
+```bash
+node tools/prerender.mjs
+```
+
+The script fails if any `data-i18n` hook can't be translated (every hook must wrap plain text only).
+
 ## Local development
 
 ```bash

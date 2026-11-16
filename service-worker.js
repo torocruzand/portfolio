@@ -9,13 +9,15 @@
  *   cross-origin  untouched (never cached)
  */
 
-const VERSION = 'v7';
+const VERSION = 'v8';
 const CACHE_NAME = `portfolio-core-${VERSION}`;
 const IMAGE_CACHE = `portfolio-images-${VERSION}`;
 
 const CORE_ASSETS = [
   '/',
   '/index.html',
+  '/es/',
+  '/pt/',
   '/offline.html',
   '/styles.css',
   '/main.js',

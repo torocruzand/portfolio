@@ -4,12 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Andrés del Toro Cruz — Full-Stack Developer &amp; Technology Educator · TOROCRUZAND</title>
+  <title>Andrés del Toro Cruz — Full-Stack Developer &amp; Educator</title>
   <meta name="description"
     content="Portfolio of Andres del Toro Cruz (torocruzand), software developer with more than 12 years of experience in multiplatform and scalable applications.">
   <meta name="author" content="Andrés del Toro Cruz">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://torocruzand.com/">
+  <link rel="me" href="https://github.com/torocruzand">
+  <link rel="me" href="https://linkedin.com/in/torocruzand">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <meta name="theme-color" content="#08090A" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#F4F3EF" media="(prefers-color-scheme: light)">
   <meta name="color-scheme" content="dark light">
@@ -21,36 +24,40 @@
   <meta property="og:description"
     content="Portfolio of Andres del Toro Cruz (torocruzand), a software developer with over 12 years of experience in cross-platform and scalable applications.">
   <meta property="og:url" content="https://torocruzand.com/">
-  <meta property="og:image" content="https://torocruzand.com/images/profile.png">
-  <meta property="og:image:width" content="300">
-  <meta property="og:image:height" content="300">
-  <meta property="og:image:alt" content="Portrait of Andrés del Toro Cruz">
+  <meta property="og:image" content="https://torocruzand.com/images/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Andrés del Toro Cruz — Full-Stack Developer &amp; Technology Educator">
   <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta property="og:locale:alternate" content="pt_BR">
   <meta property="profile:first_name" content="Andrés">
   <meta property="profile:last_name" content="del Toro Cruz">
   <meta property="profile:username" content="torocruzand">
 
   <!-- Twitter / X -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Torocruzand's Portfolio">
   <meta name="twitter:description"
     content="Portfolio of Andres del Toro Cruz (torocruzand), a software developer with over 12 years of experience in cross-platform and scalable applications.">
-  <meta name="twitter:image" content="https://torocruzand.com/images/profile.png">
+  <meta name="twitter:image" content="https://torocruzand.com/images/og-image.png">
+  <meta name="twitter:image:alt" content="Andrés del Toro Cruz — Full-Stack Developer &amp; Technology Educator">
 
   <!-- Icons: embedded SVG favicon -->
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2308090A'/%3E%3Cpath d='M16 3v26M3 16h26' stroke='%231BA3B5' stroke-width='1.5'/%3E%3Crect x='9' y='9' width='14' height='14' fill='none' stroke='%23E2E8F0' stroke-width='2'/%3E%3Crect x='14' y='14' width='4' height='4' fill='%2300E5A3'/%3E%3C/svg%3E">
-  <link rel="alternate icon" href="images/favicon.ico" sizes="any">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="alternate icon" href="/images/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
   <meta name="application-name" content="TOROCRUZAND">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="TOROCRUZAND">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="alternate" hreflang="en" href="https://torocruzand.com/">
-  <link rel="alternate" hreflang="es" href="https://torocruzand.com/?lang=es">
-  <link rel="alternate" hreflang="pt-BR" href="https://torocruzand.com/?lang=pt">
+  <link rel="alternate" hreflang="es" href="https://torocruzand.com/es/">
+  <link rel="alternate" hreflang="pt-BR" href="https://torocruzand.com/pt/">
   <link rel="alternate" hreflang="x-default" href="https://torocruzand.com/">
 
   <!-- Theme bootstrap: runs before first paint to prevent a flash (CLS 0). -->
@@ -62,16 +69,17 @@
         t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'blueprint' : 'carbon';
       }
       document.documentElement.dataset.theme = t;
-      var l = new URLSearchParams(location.search).get('lang');
-      try { l = l || localStorage.getItem('tc-lang') || localStorage.getItem('preferredLanguage'); } catch (e) { }
+      var seg = location.pathname.split('/')[1];
+      var l = /^(es|pt)$/.test(seg) ? seg : new URLSearchParams(location.search).get('lang');
+      if (!/^(es|pt)$/.test(seg)) { try { l = l || localStorage.getItem('tc-lang') || localStorage.getItem('preferredLanguage'); } catch (e) { } }
       if (!/^(en|es|pt)$/.test(l || '')) l = (navigator.language || 'en').slice(0, 2);
       if (/^(es|pt)$/.test(l)) document.documentElement.lang = l === 'pt' ? 'pt-BR' : l;
     })();
   </script>
 
-  <link rel="stylesheet" href="styles.css">
-  <link rel="modulepreload" href="i18n.js">
-  <script type="module" src="main.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="modulepreload" href="/i18n.js">
+  <script type="module" src="/main.js"></script>
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -83,14 +91,26 @@
         "@id": "https://torocruzand.com/#person",
         "name": "Andrés del Toro Cruz",
         "alternateName": ["TOROCRUZAND", "torocruzand"],
+        "givenName": "Andrés",
+        "familyName": "del Toro Cruz",
         "url": "https://torocruzand.com/",
         "image": "https://torocruzand.com/images/profile.png",
         "jobTitle": "Full-Stack Software Developer",
         "worksFor": { "@type": "Organization", "name": "LiveCode Ltd" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Holguín" },
+        "knowsLanguage": ["es", "en", "pt"],
         "address": { "@type": "PostalAddress", "addressRegion": "Paraná", "addressCountry": "BR" },
         "email": "mailto:torocruzand@gmail.com",
         "knowsAbout": ["LiveCode", "JavaScript", "TypeScript", ".NET Core", "C#", "PHP", "SQL", "Flutter", "Vue.js", "Angular", "Astro"],
         "sameAs": ["https://github.com/torocruzand", "https://linkedin.com/in/torocruzand"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://torocruzand.com/#website",
+        "url": "https://torocruzand.com/",
+        "name": "TOROCRUZAND",
+        "inLanguage": ["en", "es", "pt-BR"],
+        "publisher": { "@id": "https://torocruzand.com/#person" }
       },
       {
         "@type": "ProfilePage",
@@ -98,6 +118,8 @@
         "url": "https://torocruzand.com/",
         "name": "Torocruzand's Portfolio",
         "inLanguage": ["en", "es", "pt-BR"],
+        "isPartOf": { "@id": "https://torocruzand.com/#website" },
+        "dateModified": "2026-11-16",
         "mainEntity": { "@id": "https://torocruzand.com/#person" },
         "hasPart": [
           {
@@ -320,7 +342,7 @@
           <a class="key-cta" href="#contact" data-magnetic>
             <kbd aria-hidden="true">@</kbd> <span data-i18n="hero.getInTouch">Get In Touch</span>
           </a>
-          <a class="key-cta" href="cv/Andres-del-Toro-Cruz-CV-EN.pdf" download data-cv data-magnetic>
+          <a class="key-cta" href="/cv/Andres-del-Toro-Cruz-CV-EN.pdf" download data-cv data-magnetic>
             <kbd aria-hidden="true">↧</kbd> <span data-i18n="cv.download">Download CV</span>
           </a>
         </div>
@@ -838,7 +860,7 @@
           <a href="mailto:torocruzand@gmail.com"><span class="micro" data-i18n="contact.email">Email</span><span class="cmd">torocruzand@gmail.com</span></a>
           <a href="https://github.com/torocruzand" target="_blank" rel="noopener"><span class="micro">GitHub</span><span class="cmd">@torocruzand</span></a>
           <a href="https://linkedin.com/in/torocruzand" target="_blank" rel="noopener"><span class="micro">LinkedIn</span><span class="cmd">@torocruzand</span></a>
-          <a href="cv/Andres-del-Toro-Cruz-CV-EN.pdf" download data-cv><span class="micro" data-i18n="cv.label">CV · PDF · 1 page</span><span class="cmd" data-i18n="cv.download">Download CV</span></a>
+          <a href="/cv/Andres-del-Toro-Cruz-CV-EN.pdf" download data-cv><span class="micro" data-i18n="cv.label">CV · PDF · 1 page</span><span class="cmd" data-i18n="cv.download">Download CV</span></a>
         </div>
       </div>
     </section>

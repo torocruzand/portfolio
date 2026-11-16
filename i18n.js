@@ -12,7 +12,7 @@ export const LANGS = ['en', 'es', 'pt'];
 
 export const dict = {
   en: {
-    'meta.title': 'Andrés del Toro Cruz — Full-Stack Developer & Technology Educator · TOROCRUZAND',
+    'meta.title': 'Andrés del Toro Cruz — Full-Stack Developer & Educator',
     'meta.description': 'Portfolio of Andres del Toro Cruz (torocruzand), software developer with more than 12 years of experience in multiplatform and scalable applications.',
     'skip': 'Skip to content',
 
@@ -139,7 +139,7 @@ export const dict = {
   },
 
   es: {
-    'meta.title': 'Andrés del Toro Cruz — Desarrollador Full-Stack & Educador Tecnológico · TOROCRUZAND',
+    'meta.title': 'Andrés del Toro Cruz — Desarrollador Full-Stack y Educador',
     'meta.description': 'Portafolio de Andrés del Toro Cruz (torocruzand), desarrollador de software con más de 12 años de experiencia en aplicaciones multiplataforma y escalables.',
     'skip': 'Saltar al contenido',
 
@@ -266,7 +266,7 @@ export const dict = {
   },
 
   pt: {
-    'meta.title': 'Andrés del Toro Cruz — Desenvolvedor Full-Stack & Educador de Tecnologia · TOROCRUZAND',
+    'meta.title': 'Andrés del Toro Cruz — Desenvolvedor Full-Stack e Educador',
     'meta.description': 'Portfólio de Andrés del Toro Cruz (torocruzand), desenvolvedor de software com mais de 12 anos de experiência em aplicações multiplataforma e escaláveis.',
     'skip': 'Pular para o conteúdo',
 

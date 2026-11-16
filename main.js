@@ -25,6 +25,8 @@ import { LANGS, detectLang, saveLang, applyLang, t } from './i18n.js';
 
 /** Active UI language (en | es | pt). `?lang=` in the URL wins once. */
 let lang = (() => {
+  const seg = location.pathname.split('/')[1];
+  if (seg === 'es' || seg === 'pt') return seg;          // pre-rendered /es/ and /pt/
   const q = new URLSearchParams(location.search).get('lang');
   return LANGS.includes(q) ? q : detectLang();
 })();
@@ -1412,14 +1414,15 @@ class Language {
     this.buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === next)));
     // CV links always point at the PDF in the active language.
     $$('[data-cv]').forEach((a) => {
-      a.href = 'cv/Andres-del-Toro-Cruz-CV-' + next.toUpperCase() + '.pdf';
+      a.href = '/cv/Andres-del-Toro-Cruz-CV-' + next.toUpperCase() + '.pdf';
       a.hreflang = next === 'pt' ? 'pt-BR' : next;
     });
-    // Keep a shareable, crawlable URL without reloading.
+    // Keep the URL on the crawlable language page (/, /es/, /pt/) without reloading.
     const url = new URL(location.href);
-    if (next === 'en') url.searchParams.delete('lang');
-    else url.searchParams.set('lang', next);
+    url.searchParams.delete('lang');
+    url.pathname = next === 'en' ? '/' : `/${next}/`;
     history.replaceState(history.state, '', url);
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', `https://torocruzand.com${url.pathname}`);
     if (announce) {
       synth.play('clack');
       toast(L('toast.lang'));
@@ -1506,7 +1509,7 @@ class PWA {
 }
 
 function registerServiceWorker() {
-  navigator.serviceWorker.register('service-worker.js').then((reg) => {
+  navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then((reg) => {
     reg.update();
     if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
     reg.addEventListener('updatefound', () => {

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /tools/
+Disallow: /cv/src/
+
+Sitemap: https://torocruzand.com/sitemap.xml
