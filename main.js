@@ -301,7 +301,7 @@ class Lattice {
     const cs = getComputedStyle(document.documentElement);
     return {
       node: cs.getPropertyValue('--canvas-node').trim() || '226, 232, 240',
-      alloc: cs.getPropertyValue('--canvas-alloc').trim() || '255, 79, 0',
+      alloc: cs.getPropertyValue('--canvas-alloc').trim() || '27, 163, 181',
       signal: cs.getPropertyValue('--canvas-signal').trim() || '0, 229, 163',
     };
   }

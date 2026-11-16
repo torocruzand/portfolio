@@ -107,8 +107,9 @@
     --faint: #5c6168;
 
     /* Accents */
-    --orange: #ff4f00;
-    --orange-ink: #ff4f00;
+    --teal: #1ba3b5;          /* 6.6:1 on carbon */
+    --teal-ink: #1ba3b5;
+    --teal-deep: #077688;     /* logo teal */
     --green: #00e5a3;
     --green-ink: #00e5a3;
 
@@ -121,12 +122,13 @@
     --ink-faint: var(--faint);
     --line: rgba(255, 255, 255, 0.08);
     --line-strong: rgba(255, 255, 255, 0.18);
-    --accent: var(--orange);
-    --accent-ink: var(--orange-ink);
+    --accent: var(--teal);
+    --accent-ink: var(--teal-ink);
+    --on-accent: #08090a;     /* text on accent fills */
     --signal: var(--green-ink);
-    --selection: rgba(255, 79, 0, 0.35);
+    --selection: rgba(27, 163, 181, 0.35);
     --canvas-node: 226, 232, 240;
-    --canvas-alloc: 255, 79, 0;
+    --canvas-alloc: 27, 163, 181;
     --canvas-signal: 0, 229, 163;
 
     /* Typography */
@@ -166,12 +168,12 @@
     --ink-faint: #74787e;
     --line: rgba(17, 19, 21, 0.12);
     --line-strong: rgba(17, 19, 21, 0.3);
-    --accent: #ff4f00;
-    --accent-ink: #b83700;
+    --accent: #0e8c9e;        /* 3.6:1 graphics on paper */
+    --accent-ink: #066574;    /* 6.1:1 text on paper */
     --signal: #00704f;
-    --selection: rgba(184, 55, 0, 0.22);
+    --selection: rgba(6, 101, 116, 0.22);
     --canvas-node: 17, 19, 21;
-    --canvas-alloc: 184, 55, 0;
+    --canvas-alloc: 6, 101, 116;
     --canvas-signal: 0, 112, 79;
   }
 
@@ -383,7 +385,7 @@
     font-family: var(--font-mono);
     font-size: var(--fs-small);
     background: var(--accent);
-    color: #08090a;
+    color: var(--on-accent);
     transform: translateY(-160%);
     transition: transform var(--dur-fast) var(--ease-out);
   }
@@ -984,7 +986,7 @@
     background: var(--accent);
     color: #08090a;
     border-color: var(--accent);
-    box-shadow: 0 3px 0 #8a2b00;
+    box-shadow: 0 3px 0 #0b5561;
   }
 
   .key-cta.primary kbd {
@@ -1124,9 +1126,12 @@
     transition: transform var(--dur) var(--ease-mech), background var(--dur);
   }
 
-  .xray[aria-pressed="false"] span:first-child,
-  .xray[aria-pressed="true"] span:last-child {
+  .xray[aria-pressed="false"] span:first-child {
     color: var(--bg);
+  }
+
+  .xray[aria-pressed="true"] span:last-child {
+    color: var(--on-accent);
   }
 
   .xray[aria-pressed="true"]::before {
@@ -1984,7 +1989,7 @@
     font-size: 9px;
     letter-spacing: 0.06em;
     white-space: nowrap;
-    color: var(--bg);
+    color: var(--on-accent);
     background: var(--accent);
     opacity: 0;
     transition: opacity var(--dur-fast);
