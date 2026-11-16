@@ -1,51 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#08090A">
-    <meta name="robots" content="noindex">
-    <title>Offline · TOROCRUZAND</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            min-height: 100svh;
-            display: grid;
-            place-items: center;
-            padding: 16px;
-        }
-
-        .offline-card {
-            max-width: 560px;
-            padding: 32px;
-            border: 1px solid var(--line-strong);
-            background: var(--surface);
-            font-family: var(--font-mono);
-        }
-
-        .offline-card h1 {
-            margin: 12px 0 16px;
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            font-weight: 800;
-            line-height: 0.9;
-            letter-spacing: -0.04em;
-            text-transform: uppercase;
-        }
-
-        .offline-card p {
-            margin-bottom: 24px;
-            color: var(--ink-muted);
-            font-size: var(--fs-small);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#08090A">
+  <title>Offline · TOROCRUZAND</title>
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/images/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script>
+    (function () {
+      var t;
+      try { t = localStorage.getItem('tc-theme'); } catch (e) { }
+      if (t !== 'carbon' && t !== 'blueprint') {
+        t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'blueprint' : 'carbon';
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <style>
+    .err {
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
+      gap: 28px;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+    .err-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .err-brand { color: var(--ink); text-decoration: none; font-weight: 700; letter-spacing: 0.04em; }
+    .err-card {
+      position: relative;
+      display: grid;
+      gap: 20px;
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+    }
+    .err-card::before, .err-card::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--accent);
+    }
+    .err-card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+    .err-card::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+    .err-code {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 3rem + 14vw, 11rem);
+      font-weight: 800;
+      line-height: 0.82;
+      letter-spacing: -0.06em;
+      color: var(--accent-ink);
+    }
+    .err h1 {
+      font-size: var(--fs-h3);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .err-lede { max-width: 56ch; color: var(--ink-muted); }
+    .err-path {
+      overflow-wrap: anywhere;
+      padding: 10px 12px;
+      border-left: 2px solid var(--accent);
+      background: var(--surface-2);
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+    }
+    .err-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .err-actions .key-cta { color: inherit; text-decoration: none; cursor: pointer; }
+    .err-actions .key-cta.primary { color: var(--on-accent); }
+    .err-nav ul { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; list-style: none; padding: 0; }
+    .err-nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: var(--fs-small);
+      text-decoration: none;
+    }
+    .err-nav a:hover, .err-nav a:focus-visible { border-color: var(--accent); color: var(--accent-ink); }
+    .err-dot { display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--accent); animation: blink 1.2s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .err-dot { animation: none; } }
+  </style>
 </head>
 <body>
-    <main class="offline-card">
-        <p class="micro"><span class="accent">ERR</span> · LINK DOWN · 0x0000_0000</p>
-        <h1>Signal lost</h1>
-        <p>No network route to torocruzand.com. The cached shell is still mounted — reconnect and retry.</p>
-        <a class="key-cta primary" href="/"><kbd aria-hidden="true">↻</kbd> Retry connection</a>
-    </main>
+  <main class="err">
+    <div class="err-bar micro">
+      <a class="err-brand" href="/">TOROCRUZAND</a>
+      <span><span class="err-dot" aria-hidden="true"></span><span data-k="status">ERR · LINK DOWN</span> · 0x0000_0000</span>
+    </div>
+    <section class="err-card" aria-labelledby="err-title">
+      <p class="err-code" aria-hidden="true">OFF</p>
+      <h1 id="err-title" data-k="h1">No signal</h1>
+      <p class="err-lede" data-k="p">You are offline and this page is not cached yet. Pages you have already visited still open — reconnect and try again.</p>
+      <p class="err-path"><span class="micro" data-k="path">Requested path</span><br><span id="err-path">/</span></p>
+      <div class="err-actions">
+        <a class="key-cta primary" id="err-home" href="/"><kbd aria-hidden="true">⌂</kbd> <span data-k="home">Back to home</span></a>
+        <button class="key-cta" type="button" onclick="location.reload()"><kbd aria-hidden="true">↻</kbd> <span data-k="retry">Retry connection</span></button>
+      </div>
+    </section>
+    <nav class="err-nav" aria-labelledby="err-alt">
+      <p class="micro" id="err-alt" data-k="alt">Cached sections</p>
+      <ul>
+          <li><a data-sec="about" href="/#about">About</a></li>
+          <li><a data-sec="projects" href="/#projects">Projects</a></li>
+          <li><a data-sec="experience" href="/#experience">Experience</a></li>
+          <li><a data-sec="skills" href="/#skills">Skills</a></li>
+          <li><a data-sec="contact" href="/#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </main>
+  <script>
+    (function () {
+      var S = {"en": {"title": "Offline", "status": "ERR · LINK DOWN", "h1": "No signal", "p": "You are offline and this page is not cached yet. Pages you have already visited still open — reconnect and try again.", "home": "Back to home", "retry": "Retry connection", "alt": "Cached sections", "path": "Requested path", "nav": ["About", "Projects", "Experience", "Skills", "Contact"]}, "es": {"title": "Sin conexión", "status": "ERR · ENLACE CAÍDO", "h1": "Sin señal", "p": "No tienes conexión y esta página aún no está en caché. Las páginas que ya visitaste siguen abriendo: vuelve a conectarte e inténtalo de nuevo.", "home": "Volver al inicio", "retry": "Reintentar conexión", "alt": "Secciones en caché", "path": "Ruta solicitada", "nav": ["Sobre mí", "Proyectos", "Experiencia", "Habilidades", "Contacto"]}, "pt": {"title": "Offline", "status": "ERR · LINK CAÍDO", "h1": "Sem sinal", "p": "Você está offline e esta página ainda não está em cache. As páginas que você já visitou continuam abrindo — reconecte e tente novamente.", "home": "Voltar ao início", "retry": "Tentar reconectar", "alt": "Seções em cache", "path": "Caminho solicitado", "nav": ["Sobre", "Projetos", "Experiência", "Habilidades", "Contato"]}};
+      var seg = location.pathname.split('/')[1], l = /^(es|pt)$/.test(seg) ? seg : null;
+      if (!l) { try { l = localStorage.getItem('tc-lang') || localStorage.getItem('preferredLanguage'); } catch (e) { } }
+      if (!S[l]) l = (navigator.language || 'en').slice(0, 2);
+      if (!S[l]) l = 'en';
+      var s = S[l], base = l === 'en' ? '/' : '/' + l + '/';
+      var p = location.pathname + location.search;
+      try { p = decodeURI(p); } catch (e) { }
+      document.getElementById('err-path').textContent = p;
+      document.getElementById('err-home').href = base;
+      if (l === 'en') return;
+      document.documentElement.lang = l === 'pt' ? 'pt-BR' : l;
+      document.title = s.title + ' · TOROCRUZAND';
+      document.querySelectorAll('[data-k]').forEach(function (el) { if (s[el.dataset.k]) el.textContent = s[el.dataset.k]; });
+      document.querySelectorAll('[data-sec]').forEach(function (a, i) { a.textContent = s.nav[i]; a.href = base + '#' + a.dataset.sec; });
+    })();
+  </script>
 </body>
 </html>
