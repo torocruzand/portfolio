@@ -1,6 +1,8 @@
 #!/bin/sh
 # Renders cv/src/cv-<lang>.html to cv/Andres-del-Toro-Cruz-CV-<LANG>.pdf
 # with any installed Chromium browser (Chrome, Brave, Edge, Chromium).
+# If headless Chromium hangs on macOS, use the WebKit fallback instead:
+#   for l in en es pt; do osascript -l JavaScript cv/render-webkit.js "$l"; done
 set -eu
 cd "$(dirname "$0")"
 python3 build_cv.py
