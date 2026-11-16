@@ -1,0 +1,268 @@
+/* CV print stylesheet — A4, Swiss/industrial, matches torocruzand.com tokens. */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink: #111315;
+  --muted: #555a60;
+  --line: #d9d7d0;
+  --paper: #ffffff;
+  --side: #f4f3ef;
+  --accent: #b83700;
+  --signal: #00704f;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 8.4pt;
+  line-height: 1.33;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.sheet {
+  display: grid;
+  height: 297mm;
+  overflow: hidden;
+  grid-template-columns: 64mm 1fr;
+  width: 210mm;
+}
+
+/* ---------- Sidebar ---------- */
+.side {
+  background: var(--side);
+  padding: 11mm 7mm 9mm 9mm;
+  border-right: 1px solid var(--line);
+}
+
+.photo {
+  width: 24mm;
+  height: 24mm;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+  filter: grayscale(1) contrast(1.05);
+  margin-bottom: 4.5mm;
+}
+
+h1 {
+  font-size: 17pt;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.role {
+  margin-top: 2.5mm;
+  font-family: var(--mono);
+  font-size: 7.6pt;
+  color: var(--accent);
+}
+
+.loc {
+  margin-top: 1mm;
+  font-family: var(--mono);
+  font-size: 7.6pt;
+  color: var(--muted);
+}
+
+.contact {
+  margin: 4mm 0 0;
+  padding-top: 3mm;
+  border-top: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  display: grid;
+  gap: 1.2mm;
+  word-break: break-all;
+}
+
+.side section {
+  margin-top: 4.5mm;
+}
+
+h2 {
+  position: relative;
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-bottom: 1.3mm;
+  margin-bottom: 2.4mm;
+  border-bottom: 1px solid var(--ink);
+}
+
+h2::before {
+  content: "+";
+  position: absolute;
+  right: 0;
+  bottom: -0.62em;
+  font-weight: 400;
+  background: inherit;
+  color: var(--muted);
+}
+
+.facts {
+  display: grid;
+  gap: 1.6mm;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 13mm 1fr;
+  align-items: baseline;
+}
+
+.facts b {
+  font-size: 13pt;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.facts span,
+.langs span {
+  color: var(--muted);
+  font-size: 8pt;
+}
+
+.langs {
+  display: grid;
+  gap: 1.4mm;
+}
+
+.langs li {
+  display: grid;
+}
+
+.skills {
+  display: grid;
+  gap: 1.8mm;
+}
+
+.skills dt {
+  font-family: var(--mono);
+  font-size: 7pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.skills dd {
+  font-size: 8pt;
+}
+
+/* ---------- Body ---------- */
+.body {
+  padding: 10mm 11mm 7mm 9mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.body section + section {
+  margin-top: 3.6mm;
+}
+
+.profile {
+  font-size: 8.7pt;
+  line-height: 1.42;
+}
+
+.job {
+  break-inside: avoid;
+  padding: 1.4mm 0 1.6mm;
+  border-bottom: 1px solid var(--line);
+}
+
+.job:last-child {
+  border-bottom: 0;
+}
+
+.job h3 {
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.job .org {
+  font-weight: 400;
+}
+
+.meta {
+  margin-top: 0.6mm;
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  color: var(--muted);
+}
+
+.meta time {
+  color: var(--signal);
+}
+
+.job ul {
+  margin-top: 1.4mm;
+  display: grid;
+  gap: 0.8mm;
+}
+
+.job li {
+  position: relative;
+  padding-left: 4mm;
+}
+
+.job li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 2mm;
+  height: 1px;
+  background: var(--accent);
+}
+
+.oss {
+  display: grid;
+  gap: 0.7mm;
+}
+
+.oss b {
+  font-weight: 700;
+}
+
+.note {
+  margin-top: 2mm;
+  font-family: var(--mono);
+  font-size: 7.2pt;
+  color: var(--muted);
+}
+
+.foot {
+  margin-top: auto;
+  padding-top: 4mm;
+  font-family: var(--mono);
+  font-size: 7pt;
+  color: var(--muted);
+  text-align: right;
+}

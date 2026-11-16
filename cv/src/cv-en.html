@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Andrés del Toro Cruz — CV</title>
+<meta name="author" content="Andrés del Toro Cruz">
+<meta name="description" content="Full-Stack Software Developer · Technology Educator">
+<style>/* CV print stylesheet — A4, Swiss/industrial, matches torocruzand.com tokens. */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink: #111315;
+  --muted: #555a60;
+  --line: #d9d7d0;
+  --paper: #ffffff;
+  --side: #f4f3ef;
+  --accent: #b83700;
+  --signal: #00704f;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 8.4pt;
+  line-height: 1.33;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.sheet {
+  display: grid;
+  height: 297mm;
+  overflow: hidden;
+  grid-template-columns: 64mm 1fr;
+  width: 210mm;
+}
+
+/* ---------- Sidebar ---------- */
+.side {
+  background: var(--side);
+  padding: 11mm 7mm 9mm 9mm;
+  border-right: 1px solid var(--line);
+}
+
+.photo {
+  width: 24mm;
+  height: 24mm;
+  object-fit: cover;
+  border: 1px solid var(--ink);
+  filter: grayscale(1) contrast(1.05);
+  margin-bottom: 4.5mm;
+}
+
+h1 {
+  font-size: 17pt;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.role {
+  margin-top: 2.5mm;
+  font-family: var(--mono);
+  font-size: 7.6pt;
+  color: var(--accent);
+}
+
+.loc {
+  margin-top: 1mm;
+  font-family: var(--mono);
+  font-size: 7.6pt;
+  color: var(--muted);
+}
+
+.contact {
+  margin: 4mm 0 0;
+  padding-top: 3mm;
+  border-top: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  display: grid;
+  gap: 1.2mm;
+  word-break: break-all;
+}
+
+.side section {
+  margin-top: 4.5mm;
+}
+
+h2 {
+  position: relative;
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-bottom: 1.3mm;
+  margin-bottom: 2.4mm;
+  border-bottom: 1px solid var(--ink);
+}
+
+h2::before {
+  content: "+";
+  position: absolute;
+  right: 0;
+  bottom: -0.62em;
+  font-weight: 400;
+  background: inherit;
+  color: var(--muted);
+}
+
+.facts {
+  display: grid;
+  gap: 1.6mm;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 13mm 1fr;
+  align-items: baseline;
+}
+
+.facts b {
+  font-size: 13pt;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.facts span,
+.langs span {
+  color: var(--muted);
+  font-size: 8pt;
+}
+
+.langs {
+  display: grid;
+  gap: 1.4mm;
+}
+
+.langs li {
+  display: grid;
+}
+
+.skills {
+  display: grid;
+  gap: 1.8mm;
+}
+
+.skills dt {
+  font-family: var(--mono);
+  font-size: 7pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.skills dd {
+  font-size: 8pt;
+}
+
+/* ---------- Body ---------- */
+.body {
+  padding: 10mm 11mm 7mm 9mm;
+  display: flex;
+  flex-direction: column;
+}
+
+.body section + section {
+  margin-top: 3.6mm;
+}
+
+.profile {
+  font-size: 8.7pt;
+  line-height: 1.42;
+}
+
+.job {
+  break-inside: avoid;
+  padding: 1.4mm 0 1.6mm;
+  border-bottom: 1px solid var(--line);
+}
+
+.job:last-child {
+  border-bottom: 0;
+}
+
+.job h3 {
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.job .org {
+  font-weight: 400;
+}
+
+.meta {
+  margin-top: 0.6mm;
+  font-family: var(--mono);
+  font-size: 7.4pt;
+  color: var(--muted);
+}
+
+.meta time {
+  color: var(--signal);
+}
+
+.job ul {
+  margin-top: 1.4mm;
+  display: grid;
+  gap: 0.8mm;
+}
+
+.job li {
+  position: relative;
+  padding-left: 4mm;
+}
+
+.job li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 2mm;
+  height: 1px;
+  background: var(--accent);
+}
+
+.oss {
+  display: grid;
+  gap: 0.7mm;
+}
+
+.oss b {
+  font-weight: 700;
+}
+
+.note {
+  margin-top: 2mm;
+  font-family: var(--mono);
+  font-size: 7.2pt;
+  color: var(--muted);
+}
+
+.foot {
+  margin-top: auto;
+  padding-top: 4mm;
+  font-family: var(--mono);
+  font-size: 7pt;
+  color: var(--muted);
+  text-align: right;
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+  <aside class="side">
+    <img class="photo" src="../../images/profile.png" alt="" width="120" height="120">
+    <h1>Andrés del Toro Cruz</h1>
+    <p class="role">Full-Stack Software Developer · Technology Educator</p>
+    <p class="loc">Paraná, Brazil · Open to remote</p>
+    <ul class="contact"><li><a href="mailto:torocruzand@gmail.com">torocruzand@gmail.com</a></li><li><a href="https://torocruzand.com">torocruzand.com</a></li><li><a href="https://github.com/torocruzand">github.com/torocruzand</a></li><li><a href="https://linkedin.com/in/torocruzand">linkedin.com/in/torocruzand</a></li></ul>
+    <section><h2>Key Facts</h2><ul class="facts"><li><b>10+</b><span>years of experience</span></li><li><b>300+</b><span>projects delivered</span></li><li><b>20+</b><span>technologies in production</span></li></ul></section>
+    <section><h2>Languages</h2><ul class="langs"><li><b>Spanish</b><span>Native</span></li><li><b>English</b><span>Professional working proficiency</span></li><li><b>Portuguese</b><span>Professional working proficiency</span></li></ul></section>
+    <section><h2>Technical Skills</h2><dl class="skills"><div><dt>Web</dt><dd>JavaScript, TypeScript, HTML5, CSS3, PHP, CodeIgniter, Vue.js, Angular, Astro, Tailwind CSS, WordPress</dd></div><div><dt>Cross-platform</dt><dd>LiveCode, .NET Core / C#, Flutter / Dart</dd></div><div><dt>Data</dt><dd>SQL, MySQL, SQLite, SQL Server, REST APIs, JSON, XML, YAML</dd></div><div><dt>Tooling</dt><dd>Git, GitHub, Stacked Git, SmartGit, VS Code, Visual Studio, Android Studio</dd></div><div><dt>AI tools</dt><dd>Claude Code, OpenAI Codex, Google Gemini, Google Antigravity</dd></div><div><dt>Practices</dt><dd>Agile (Scrum, Kanban), code review, mentoring, technical documentation, AI-augmented development</dd></div></dl></section>
+  </aside>
+  <div class="body">
+    <section><h2>Profile</h2><p class="profile">Full-Stack Software Developer with more than a decade of experience designing, building and maintaining cross-platform, scalable applications for desktop, web and mobile. Combines hands-on engineering with a long teaching background: clear technical communication, mentoring and code review come standard. Specialist in LiveCode, with production work across .NET Core, PHP and modern JavaScript frameworks.</p></section>
+    <section><h2>Experience</h2><article class="job"><header><h3>Software Developer <span class="org">— LiveCode Ltd</span></h3><p class="meta"><time>2024 – Present</time> · remote · Paraná, Brazil</p></header><ul><li>Develop cross-platform applications and contribute to the LiveCode ecosystem.</li><li>Build scalable solutions together with an international, distributed team on high-impact products.</li></ul></article><article class="job"><header><h3>Software Developer <span class="org">— Severin Studio S.L.</span></h3><p class="meta"><time>2021 – 2024</time> · remote</p></header><ul><li>Developed cross-platform desktop and web applications for the studio&#x27;s client portfolio.</li><li>Owned features end to end, from requirements and estimation to delivery and support.</li></ul></article><article class="job"><header><h3>Software Developer <span class="org">— SifiSoft</span></h3><p class="meta"><time>2019 – 2021</time> · Holguín, Cuba</p></header><ul><li>Built cross-platform desktop applications and multimedia solutions with LiveCode and .NET Core.</li><li>Delivered web applications with PHP/CodeIgniter and JavaScript for a diverse client base.</li></ul></article><article class="job"><header><h3>Programmer &amp; Professor <span class="org">— CESOFTAD, University of Holguín</span></h3><p class="meta"><time>2016 – 2019</time> · Holguín, Cuba</p></header><ul><li>Taught software development courses and built educational platforms.</li><li>Developed and maintained academic systems, including OJS/OMP journal and monograph publishing.</li><li>Shipped university products such as an institutional event-memory application (Windows) and the &quot;Dictionary of Martí&#x27;s Thought&quot; Android app.</li></ul></article><article class="job"><header><h3>Student Developer <span class="org">— CESOFTAD</span></h3><p class="meta"><time>2012 – 2014</time> · Holguín, Cuba</p></header><ul><li>Started building production applications; gained a foundation in LiveCode, web technologies and databases.</li></ul></article></section>
+    <section><h2>Education</h2><article class="job"><header><h3>Bachelor of Education — Mathematics and Physics</h3><p class="meta">University of Holguín · Holguín, Cuba</p></header></article><article class="job"><header><h3>Software Development (self-directed, continuous)</h3><p class="meta">LiveCode, .NET Core, JavaScript, Tailwind CSS and more · 2012 – Present</p></header></article></section>
+    <section><h2>Selected Projects</h2><ul class="oss"><li><b>PhotonJSON</b> — JSON encode/decode library written in pure LiveCode Script, no externals.</li><li><b>TinyColor for LiveCode</b> — Port of the TinyColor v1.4.2 colour micro-framework to LiveCode Script.</li><li><b>DevGuides</b> — IDE extension that helps LiveCode developers lay out user interfaces.</li><li><b>touchGestures</b> — Library for handling finger gestures on touch screens.</li><li><b>Drag Drop Files into IDE</b> — Plugin to drag images, video, SVG and text into any open LiveCode IDE window.</li></ul><p class="note">Open source under github.com/Ferruslogic</p></section>
+    <p class="foot">References available on request · torocruzand.com</p>
+  </div>
+</main>
+</body>
+</html>
