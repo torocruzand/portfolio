@@ -723,7 +723,8 @@ class Reticle {
     if (this.target === el) return;
     this.target = el;
     this.root.classList.add('is-locked');
-    const name = el.getAttribute('aria-label') || el.textContent.trim().split(/\s+/).slice(0, 3).join(' ');
+    // innerText skips display:none parts (e.g. hidden section numbers).
+    const name = el.getAttribute('aria-label') || el.innerText.trim().split(/\s+/).slice(0, 3).join(' ');
     this.label.textContent = `${el.tagName} · ${name}`.slice(0, 38).toUpperCase();
     synth.play('key');
   }
@@ -753,20 +754,34 @@ class Reticle {
     }
 
     // Spring physics per channel (stiff on position, softer on size).
+    // Integrate in ≤1-frame substeps: a stiff spring with a large dt (slow or
+    // throttled frames) would otherwise overshoot and diverge.
     const g = this.g;
+    const subs = Math.max(1, Math.ceil(step));
+    const h = step / subs;
     const spring = (key, vkey, target, k, d) => {
-      g[vkey] = (g[vkey] + (target - g[key]) * k * step) * Math.pow(d, step);
-      g[key] += g[vkey] * step;
+      g[vkey] = (g[vkey] + (target - g[key]) * k * h) * Math.pow(d, h);
+      g[key] += g[vkey] * h;
     };
-    spring('x', 'vx', tx, 0.32, 0.62);
-    spring('y', 'vy', ty, 0.32, 0.62);
-    spring('w', 'vw', tw, 0.22, 0.66);
-    spring('h', 'vh', th, 0.22, 0.66);
+    for (let i = 0; i < subs; i++) {
+      spring('x', 'vx', tx, 0.32, 0.62);
+      spring('y', 'vy', ty, 0.32, 0.62);
+      spring('w', 'vw', tw, 0.22, 0.66);
+      spring('h', 'vh', th, 0.22, 0.66);
+    }
+    if (!Number.isFinite(g.x + g.y + g.w + g.h)) {
+      Object.assign(g, { x: tx, y: ty, w: tw, h: th, vx: 0, vy: 0, vw: 0, vh: 0 });
+    }
 
     this.box.style.transform = `translate3d(${g.x}px, ${g.y}px, 0)`;
     this.box.style.width = `${g.w}px`;
     this.box.style.height = `${g.h}px`;
-    this.label.style.transform = `translate3d(0, ${-16}px, 0)`;
+    // Flip the label below the target when there's no room above (e.g. the
+    // fixed header), and keep it inside the viewport horizontally.
+    const labelW = this.label.offsetWidth || 0;
+    const ly = g.y < 22 ? g.h + 4 : -16;
+    const lx = Math.min(0, window.innerWidth - 8 - (g.x + labelW));
+    this.label.style.transform = `translate3d(${lx}px, ${ly}px, 0)`;
     this.dot.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
   }
 }
