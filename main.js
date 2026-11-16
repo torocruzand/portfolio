@@ -1410,6 +1410,11 @@ class Language {
     saveLang(next);
     applyLang(next);
     this.buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === next)));
+    // CV links always point at the PDF in the active language.
+    $$('[data-cv]').forEach((a) => {
+      a.href = 'cv/Andres-del-Toro-Cruz-CV-' + next.toUpperCase() + '.pdf';
+      a.hreflang = next === 'pt' ? 'pt-BR' : next;
+    });
     // Keep a shareable, crawlable URL without reloading.
     const url = new URL(location.href);
     if (next === 'en') url.searchParams.delete('lang');

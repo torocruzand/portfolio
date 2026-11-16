@@ -84,6 +84,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // CV PDFs: cache-first once downloaded, so they open offline too.
+  if (url.pathname.startsWith('/cv/') && url.pathname.endsWith('.pdf')) {
+    event.respondWith(
+      caches.open(IMAGE_CACHE).then((cache) =>
+        cache.match(request).then((cached) => cached || fetch(request).then((response) => {
+          if (response.ok) cache.put(request, response.clone());
+          return response;
+        })))
+    );
+    return;
+  }
+
   // Images: cache-first.
   if (request.destination === 'image') {
     event.respondWith(
