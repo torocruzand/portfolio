@@ -41,21 +41,21 @@ Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependenc
 - `hreflang` alternates (plus `x-default`) are declared in every page and in `sitemap.xml`; `robots.txt` points to the sitemap.
 - Social cards use `images/og-image.png` (1200×630, `summary_large_image`). JSON-LD declares `Person`, `WebSite` and `ProfilePage`, with each public project.
 
-**After editing `index.html` or `i18n.js`, regenerate the language pages:**
+**After editing `index.html`, `i18n.js`, `styles.css` or `main.js`, run:**
 
 ```bash
 node tools/prerender.mjs
 ```
 
-The script fails if any `data-i18n` hook can't be translated (every hook must wrap plain text only).
+It regenerates `es/` and `pt/`, and stamps a content hash on every asset URL (`/styles.css?v=…`, `/main.js?v=…`, `i18n.js`) and on the service worker's cache. A changed file therefore always gets a new URL, so no browser, service worker or CDN can serve new HTML with an old stylesheet, and deploys need no cache purge. The script fails if any `data-i18n` hook can't be translated (every hook must wrap plain text only).
 
 ## Local development
 
 ```bash
-python3 -m http.server 8000
+node tools/serve.mjs
 ```
 
-Open `http://localhost:8000`. ES modules need a server; `file://` will not work.
+Open `http://localhost:8000`. ES modules need a server; `file://` will not work. Prefer this over `python3 -m http.server`: it sends `Cache-Control: no-cache` (Python sends no cache headers, so browsers reuse old copies of pages and styles) and serves `404.html` for missing paths.
 
 ## Editing content
 

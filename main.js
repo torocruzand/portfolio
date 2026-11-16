@@ -78,7 +78,9 @@ const L = (key) => UI[lang]?.[key] ?? UI.en[key] ?? key;
 
 /** Lazily loads the full dictionary (≈28 KB) only when the DOM must be re-translated. */
 let i18nModule = null;
-const loadI18n = () => (i18nModule ??= import('/i18n.js'));
+// Reuse main.js's ?v= stamp so a deploy never pairs new code with a stale dictionary.
+const ASSET_QUERY = new URL(import.meta.url).search;
+const loadI18n = () => (i18nModule ??= import(`/i18n.js${ASSET_QUERY}`));
 
 /* =========================================================================
    0. Environment & helpers

@@ -2,14 +2,16 @@
  * torocruzand.com service worker.
  *
  * Strategies:
- *   navigations   network-first → cached page → cached "/" → offline.html
- *   css / js      stale-while-revalidate (instant, refreshed in background)
+ *   navigations   network-first, revalidated with the server → cached page → cached "/" → offline.html
+ *   css / js      stale-while-revalidate, keyed by the ?v= content stamp
  *   images        cache-first, filled on demand
  *   cv/*.pdf      cache-first after first download
  *   cross-origin  untouched (never cached)
  */
 
-const VERSION = 'v9';
+// ASSET_V is stamped by tools/prerender.mjs from the CSS/JS content hash.
+const ASSET_V = '415aad230d';
+const VERSION = `v10-${ASSET_V}`;
 const CACHE_NAME = `portfolio-core-${VERSION}`;
 const IMAGE_CACHE = `portfolio-images-${VERSION}`;
 
@@ -19,9 +21,9 @@ const CORE_ASSETS = [
   '/es/',
   '/pt/',
   '/offline.html',
-  '/styles.css',
-  '/main.js',
-  '/i18n.js',
+  `/styles.css?v=${ASSET_V}`,
+  `/main.js?v=${ASSET_V}`,
+  `/i18n.js?v=${ASSET_V}`,
   '/manifest.webmanifest',
   '/images/favicon.ico',
   '/images/favicon.svg',
@@ -54,7 +56,7 @@ self.addEventListener('activate', (event) => {
         keys.filter((key) => ![CACHE_NAME, IMAGE_CACHE].includes(key))
           .map((key) => caches.delete(key))
       ))
-      .then(() => (self.registration.navigationPreload ? self.registration.navigationPreload.enable() : null))
+      .then(() => (self.registration.navigationPreload ? self.registration.navigationPreload.disable() : null))
       .then(() => self.clients.claim())
   );
 });
@@ -70,8 +72,9 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
-        const preload = await event.preloadResponse;
-        const response = preload || await fetch(request);
+        // no-cache: always revalidate (cheap 304) so the HTTP cache can never hand
+        // back an old page whose markup no longer matches the current stylesheet.
+        const response = await fetch(request, { cache: 'no-cache' });
         if (response.ok) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(url.pathname, copy));
@@ -116,13 +119,13 @@ self.addEventListener('fetch', (event) => {
   // Scripts, styles, manifest: stale-while-revalidate.
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) =>
-      cache.match(request, { ignoreSearch: true }).then((cached) => {
+      cache.match(request).then((cached) => {
         const network = fetch(request)
           .then((response) => {
             if (response.ok) cache.put(request, response.clone());
             return response;
           })
-          .catch(() => cached);
+          .catch(() => cached || Response.error());
         return cached || network;
       })
     )

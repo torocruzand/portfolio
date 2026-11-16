@@ -9,15 +9,41 @@
  * the translation, data-i18n-aria values become translated aria-labels, and
  * the <head> gets per-language lang, title, description, canonical, og:url
  * and og:locale. The run fails if any hook is left untranslated.
+ *
+ * It also stamps cache-busting versions: a short content hash of styles.css,
+ * main.js and i18n.js is written as ?v=<hash> on every page that loads them
+ * (index.html, es/, pt/, 404, 500, offline) and as ASSET_V in service-worker.js,
+ * so browsers, the service worker and any CDN never pair new HTML with an
+ * old stylesheet. Run it after every change to those files.
  * Zero dependencies — Node 18+.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { dict } = await import(join(ROOT, 'i18n.js'));
 const SITE = 'https://torocruzand.com';
+
+// ---- Cache-busting stamp -------------------------------------------------
+const hash = createHash('sha256');
+for (const f of ['styles.css', 'main.js', 'i18n.js']) hash.update(readFileSync(join(ROOT, f)));
+const V = hash.digest('hex').slice(0, 10);
+const stamp = (html) => html.replace(/(["'])\/(styles\.css|main\.js|i18n\.js)(?:\?v=[\w-]+)?\1/g, `$1/$2?v=${V}$1`);
+
+for (const f of ['index.html', '404.html', '500.html', 'offline.html']) {
+  const p = join(ROOT, f);
+  writeFileSync(p, stamp(readFileSync(p, 'utf8')));
+}
+{
+  const p = join(ROOT, 'service-worker.js');
+  const sw = readFileSync(p, 'utf8');
+  if (!/const ASSET_V = '[\w-]+';/.test(sw)) throw new Error('service-worker.js: ASSET_V line not found');
+  writeFileSync(p, sw.replace(/const ASSET_V = '[\w-]+';/, `const ASSET_V = '${V}';`));
+}
+console.log(`asset version ${V}`);
+
 const source = readFileSync(join(ROOT, 'index.html'), 'utf8');
 
 const LOCALES = {
