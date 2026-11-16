@@ -3,56 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#667eea">
-    <title>Offline | Torocruzand</title>
+    <meta name="theme-color" content="#08090A">
+    <meta name="robots" content="noindex">
+    <title>Offline · TOROCRUZAND</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            min-height: 100svh;
+            display: grid;
+            place-items: center;
+            padding: 16px;
         }
 
         .offline-card {
-            max-width: 520px;
-            padding: 40px;
-            border-radius: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--card-shadow);
+            max-width: 560px;
+            padding: 32px;
+            border: 1px solid var(--line-strong);
+            background: var(--surface);
+            font-family: var(--font-mono);
         }
 
         .offline-card h1 {
-            font-size: 32px;
-            margin-bottom: 16px;
-            font-family: var(--font-heading);
+            margin: 12px 0 16px;
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
         }
 
         .offline-card p {
-            color: var(--text-secondary);
             margin-bottom: 24px;
-        }
-
-        .offline-card a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            border-radius: 12px;
-            background: var(--accent-gradient);
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
+            color: var(--ink-muted);
+            font-size: var(--fs-small);
         }
     </style>
 </head>
-<body class="dark-mode">
-    <div class="offline-card">
-        <h1>You’re offline</h1>
-        <p>It looks like you lost your connection. Please check your network and try again.</p>
-        <a href="/index.html">Back to home</a>
-    </div>
+<body>
+    <main class="offline-card">
+        <p class="micro"><span class="accent">ERR</span> · LINK DOWN · 0x0000_0000</p>
+        <h1>Signal lost</h1>
+        <p>No network route to torocruzand.com. The cached shell is still mounted — reconnect and retry.</p>
+        <a class="key-cta primary" href="/"><kbd aria-hidden="true">↻</kbd> Retry connection</a>
+    </main>
 </body>
 </html>

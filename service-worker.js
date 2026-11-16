@@ -1,16 +1,17 @@
-const CACHE_NAME = 'portfolio-cache-v3';
+const CACHE_NAME = 'portfolio-cache-v4';
 const IMAGE_CACHE = 'portfolio-images-v2';
 const CORE_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
   '/styles.css',
-  '/script.js',
+  '/main.js',
   '/manifest.webmanifest',
   '/images/favicon.ico',
   '/images/favicon.svg',
   '/images/favicon.png',
   '/images/profile.png',
+  '/images/projects/pixelcrush.jpg',
   '/images/pwa-icon-192.svg',
   '/images/pwa-icon-512.svg'
 ];
