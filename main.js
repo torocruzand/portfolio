@@ -109,7 +109,7 @@ const state = {
   staticMode: motionQuery.matches,
   pointer: { x: -9999, y: -9999, vx: 0, vy: 0, inside: false },
   scroll: { y: 0, v: 0 }, // filled on the first frame: reading scrollY here forces a layout before styles apply
-  viewport: { w: window.innerWidth, h: window.innerHeight },
+  viewport: { w: 0, h: 0 }, // filled on the first frame, like scroll
   frame: { dt: 16.7, work: 0, fps: 60 },
 };
 
@@ -222,6 +222,7 @@ class Engine {
     this.raf = 0;
     this.last = 0;
     this.running = false;
+    this.armed = false; // motion waits for arm(): the first paint stays final until the visitor engages
     this.tick = this.tick.bind(this);
 
     document.addEventListener('visibilitychange', () => {
@@ -235,8 +236,13 @@ class Engine {
     return system;
   }
 
+  arm() {
+    this.armed = true;
+    this.start();
+  }
+
   start() {
-    if (this.running || state.staticMode || document.hidden) return;
+    if (!this.armed || this.running || state.staticMode || document.hidden) return;
     this.running = true;
     this.last = performance.now();
     this.raf = requestAnimationFrame(this.tick);
@@ -303,7 +309,11 @@ function initInput() {
 
   // scrollY is read after the first frame: reading it at startup forces a synchronous layout.
   let lastScroll = null;
-  requestAnimationFrame(() => { state.scroll.y = lastScroll ??= window.scrollY; });
+  requestAnimationFrame(() => {
+    state.scroll.y = lastScroll ??= window.scrollY;
+    state.viewport.w = window.innerWidth;
+    state.viewport.h = window.innerHeight;
+  });
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     state.scroll.v = clamp(state.scroll.v * 0.5 + (y - (lastScroll ?? y)), -120, 120);
@@ -587,16 +597,33 @@ class Telemetry {
     this.clockFmt = new Intl.DateTimeFormat('en-GB', {
       timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
     });
-    const tickClock = () => { if (this.el.clock) this.el.clock.textContent = this.clockFmt.format(new Date()); };
-    tickClock();
-    setInterval(tickClock, 1000);
+    this.tickClock = () => { if (this.el.clock) this.el.clock.textContent = this.clockFmt.format(new Date()); };
+    this.tickClock();
 
-    this.render(true);
+    // Scroll range is measured when layout is already clean (ResizeObserver
+    // runs after layout), so render() never forces a synchronous reflow.
+    this.maxScroll = 1;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        this.maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      }).observe(document.body);
+    }
     // In static mode the engine is idle, so refresh on input events instead.
     const lazy = () => { if (state.staticMode) this.render(true); };
     window.addEventListener('scroll', lazy, { passive: true });
     window.addEventListener('pointermove', lazy, { passive: true });
     window.addEventListener('resize', lazy, { passive: true });
+  }
+
+  /** Starts the clock and live readouts (called once the visitor engages). */
+  arm() {
+    if (this.clockTimer) return;
+    if (!state.viewport.w) { // first-frame read may not have run (background tab)
+      state.viewport.w = window.innerWidth;
+      state.viewport.h = window.innerHeight;
+    }
+    this.clockTimer = setInterval(this.tickClock, 1000);
+    this.render(true);
   }
 
   setSection(index, label, addr) {
@@ -625,8 +652,7 @@ class Telemetry {
     if (el.ft) el.ft.textContent = state.staticMode ? 'STATIC' : `~${state.frame.work.toFixed(1)}ms`;
     if (el.fps) el.fps.textContent = state.staticMode ? '000' : pad(state.frame.fps, 3);
 
-    const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-    const pct = clamp(state.scroll.y / max, 0, 1);
+    const pct = clamp(state.scroll.y / this.maxScroll, 0, 1);
     if (el.scroll) el.scroll.textContent = (pct * 100).toFixed(1).padStart(5, '0');
     if (el.vel) {
       const v = state.scroll.v / 10;
@@ -1428,25 +1454,7 @@ class VimNav {
 }
 
 /* =========================================================================
-   14. Boot log reveal (cosmetic, motion-only)
-   ========================================================================= */
-
-function bootLog() {
-  if (state.staticMode) return;
-  const lines = $$('#compile-log li');
-  lines.forEach((li) => { li.style.opacity = '0'; });
-  lines.forEach((li, i) => {
-    setTimeout(() => {
-      li.style.opacity = '';
-      li.animate([{ opacity: 0, transform: 'translateX(-6px)' }, { opacity: 1, transform: 'none' }], {
-        duration: 220, easing: 'cubic-bezier(.16,1,.3,1)',
-      });
-    }, 260 + i * 140);
-  });
-}
-
-/* =========================================================================
-   15. Language switcher (EN / ES / PT-BR)
+   14. Language switcher (EN / ES / PT-BR)
    ========================================================================= */
 
 class Language {
@@ -1494,7 +1502,7 @@ class Language {
 }
 
 /* =========================================================================
-   16. PWA — service worker, install prompt, connectivity
+   15. PWA — service worker, install prompt, connectivity
    ========================================================================= */
 
 class PWA {
@@ -1586,7 +1594,7 @@ function registerServiceWorker() {
 }
 
 /* =========================================================================
-   17. Bootstrap
+   16. Bootstrap
    ========================================================================= */
 
 function main() {
@@ -1646,6 +1654,8 @@ function main() {
     document.documentElement.classList.remove('has-reticle');
   };
 
+  // Everything that touches the DOM for motion (glyph splitting, reticle,
+  // canvas sizing) is built here, at arm time — never during the page load.
   const startVisuals = () => {
     const canvas = $('#lattice');
     if (canvas?.getContext) lattice = engine.add(new Lattice(canvas));
@@ -1654,13 +1664,26 @@ function main() {
     if (finePointer.matches) magnetic = engine.add(new Magnetic());
     enableReticle();
     telemetry.setMode(state.staticMode ? 'STATIC' : 'LIVE');
-    engine.start();
+    // Lattice draws one still frame on construction; motion starts on arm.
   };
 
-  bootLog();
-  const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
-  if (document.readyState === 'complete') idle(startVisuals, { timeout: 800 });
-  else window.addEventListener('load', () => idle(startVisuals, { timeout: 800 }), { once: true });
+  // The first paint is the finished page. Motion, the live clock and the HUD
+  // readouts start on the first interaction (or after a few idle seconds), so
+  // nothing keeps repainting or re-laying-out the page while it loads.
+  let armed = false;
+  const ARM_EVENTS = ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+  const arm = () => {
+    if (armed) return;
+    armed = true;
+    ARM_EVENTS.forEach((type) => window.removeEventListener(type, arm));
+    startVisuals();
+    telemetry.arm();
+    engine.arm();
+  };
+  ARM_EVENTS.forEach((type) => window.addEventListener(type, arm, { passive: true }));
+  const afterLoad = () => setTimeout(arm, 5000);
+  if (document.readyState === 'complete') afterLoad();
+  else window.addEventListener('load', afterLoad, { once: true });
 
   // Live switch between LIVE and STATIC SCHEMATIC when the OS setting changes.
   motionQuery.addEventListener('change', (e) => {

@@ -10,7 +10,7 @@
  */
 
 // ASSET_V is stamped by tools/prerender.mjs from the CSS/JS content hash.
-const ASSET_V = '81132ff2c2';
+const ASSET_V = '3092285fd9';
 const VERSION = `v10-${ASSET_V}`;
 const CACHE_NAME = `portfolio-core-${VERSION}`;
 const IMAGE_CACHE = `portfolio-images-${VERSION}`;

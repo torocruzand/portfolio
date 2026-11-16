@@ -10,6 +10,10 @@
  * the <head> gets per-language lang, title, description, canonical, og:url
  * and og:locale. The run fails if any hook is left untranslated.
  *
+ * index.html (and so es/, pt/) gets styles.css inlined and minified in a
+ * <style data-inline="styles.css"> block, refreshed on every run — edit
+ * styles.css, never that block.
+ *
  * It also stamps cache-busting versions: a short content hash of styles.css,
  * main.js and i18n.js is written as ?v=<hash> on every page that loads them
  * (index.html, es/, pt/, 404, 500, offline) and as ASSET_V in service-worker.js,
@@ -32,9 +36,46 @@ for (const f of ['styles.css', 'main.js', 'i18n.js']) hash.update(readFileSync(j
 const V = hash.digest('hex').slice(0, 10);
 const stamp = (html) => html.replace(/(["'])\/(styles\.css|main\.js|i18n\.js)(?:\?v=[\w-]+)?\1/g, `$1/$2?v=${V}$1`);
 
+// ---- Inline, minified CSS for the main pages ------------------------------
+// The one-page site ships its stylesheet inside the HTML: no render-blocking
+// request, so the first paint needs a single round trip. 404/500/offline keep
+// the versioned /styles.css link (the service worker precaches it).
+function minifyCss(css) {
+  // Split into [code, string, code, string, …] so strings stay byte-for-byte.
+  const parts = [];
+  let code = '';
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+    if (c === '"' || c === "'") {
+      let j = i + 1;
+      while (j < css.length && css[j] !== c) j += css[j] === '\\' ? 2 : 1;
+      parts.push(code, css.slice(i, j + 1));
+      code = '';
+      i = j;
+    } else if (c === '/' && css[i + 1] === '*') {
+      const end = css.indexOf('*/', i + 2);
+      i = end === -1 ? css.length : end + 1;
+    } else {
+      code += c;
+    }
+  }
+  parts.push(code);
+  return parts.map((part, k) => (k % 2 ? part : part
+    .replace(/\s+/g, ' ')
+    .replace(/ ?([{};,>]) ?/g, '$1')               // never touches + or - (calc needs them spaced)
+    .replace(/: /g, ':')
+    .replace(/;}/g, '}'))).join('').trim();
+}
+const inlineCss = `<style data-inline="styles.css">${minifyCss(readFileSync(join(ROOT, 'styles.css'), 'utf8'))}</style>`;
+const inlineStyles = (html) => html.replace(
+  /<link rel="stylesheet" href="\/styles\.css(?:\?v=[\w-]+)?">|<style data-inline="styles\.css">[^<]*<\/style>/,
+  () => inlineCss);
+
 for (const f of ['index.html', '404.html', '500.html', 'offline.html']) {
   const p = join(ROOT, f);
-  writeFileSync(p, stamp(readFileSync(p, 'utf8')));
+  let html = stamp(readFileSync(p, 'utf8'));
+  if (f === 'index.html') html = inlineStyles(html);
+  writeFileSync(p, html);
 }
 {
   const p = join(ROOT, 'service-worker.js');

@@ -2111,16 +2111,6 @@
     }
   }
 
-  @keyframes rise {
-    from {
-      transform: translateY(105%);
-    }
-
-    to {
-      transform: none;
-    }
-  }
-
   @keyframes reveal {
     from {
       opacity: 0;
@@ -2158,18 +2148,8 @@
       animation: pulse 2.4s ease-in-out infinite;
     }
 
-    .mega .line > span:first-child {
-      display: inline-block;
-      animation: rise 900ms var(--ease-out) both;
-    }
-
-    .mega .l2 > span:first-child {
-      animation-delay: 90ms;
-    }
-
-    .mega .l3 > span:first-child {
-      animation-delay: 180ms;
-    }
+    /* The hero name has no entrance animation: it is the largest text on the
+       page, so it must be final at first paint (Speed Index / LCP). */
 
     /* Scroll-driven reveals (progressive enhancement). */
     @supports (animation-timeline: view()) {
