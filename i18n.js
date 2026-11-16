@@ -384,6 +384,87 @@ export const dict = {
   },
 };
 
+/**
+ * Project copy per language. Names and technology names are proper nouns and
+ * stay untranslated; EN text is the live-site original.
+ */
+const PROJECTS = {
+  photonjson: {
+    en: ['JSON library for LiveCode language', 'Library · Development',
+      'LiveCode script library for working with JSON, written in livecode-script and without the use of externals.'],
+    es: ['Librería JSON para el lenguaje LiveCode', 'Librería · Desarrollo',
+      'Librería en LiveCode Script para trabajar con JSON, escrita en livecode-script y sin usar externals.'],
+    pt: ['Biblioteca JSON para a linguagem LiveCode', 'Biblioteca · Desenvolvimento',
+      'Biblioteca em LiveCode Script para trabalhar com JSON, escrita em livecode-script e sem o uso de externals.'],
+  },
+  dragdrop: {
+    en: ['Plugin · Development', 'Plugin · Development',
+      "This plugin allows you to drag image, video, SVG and plain text files and import them into any of the LiveCode IDE's open windows."],
+    es: ['Plugin · Desarrollo', 'Plugin · Desarrollo',
+      'Este plugin permite arrastrar archivos de imagen, vídeo, SVG y texto plano e importarlos en cualquiera de las ventanas abiertas del IDE de LiveCode.'],
+    pt: ['Plugin · Desenvolvimento', 'Plugin · Desenvolvimento',
+      'Este plugin permite arrastar arquivos de imagem, vídeo, SVG e texto simples e importá-los para qualquer janela aberta do IDE do LiveCode.'],
+  },
+  tinycolor: {
+    en: ['Library · Development', 'Library · Development',
+      "This LiveCode Script library is based on Brian Grinstead's TinyColor v1.4.2 micro-framework, which was translated into LiveCode Script by the FerrusLogic team."],
+    es: ['Librería · Desarrollo', 'Librería · Desarrollo',
+      'Esta librería de LiveCode Script se basa en el micro-framework TinyColor v1.4.2 de Brian Grinstead, traducido a LiveCode Script por el equipo de FerrusLogic.'],
+    pt: ['Biblioteca · Desenvolvimento', 'Biblioteca · Desenvolvimento',
+      'Esta biblioteca em LiveCode Script é baseada no micro-framework TinyColor v1.4.2 de Brian Grinstead, traduzido para LiveCode Script pela equipe FerrusLogic.'],
+  },
+  touchgestures: {
+    en: ['Library · Development', 'Library · Development',
+      'A LiveCode Script library for handling finger gestures on a screen.'],
+    es: ['Librería · Desarrollo', 'Librería · Desarrollo',
+      'Librería de LiveCode Script para gestionar gestos con los dedos en una pantalla.'],
+    pt: ['Biblioteca · Desenvolvimento', 'Biblioteca · Desenvolvimento',
+      'Biblioteca em LiveCode Script para tratar gestos com os dedos em uma tela.'],
+  },
+  devguides: {
+    en: ['Plugin · Development', 'Plugin · Development',
+      'Extension to help LiveCode developers to design the UI.'],
+    es: ['Plugin · Desarrollo', 'Plugin · Desarrollo',
+      'Extensión que ayuda a los desarrolladores de LiveCode a diseñar la interfaz de usuario.'],
+    pt: ['Plugin · Desenvolvimento', 'Plugin · Desenvolvimento',
+      'Extensão que ajuda desenvolvedores LiveCode a projetar a interface do usuário.'],
+  },
+  accreditation: {
+    en: ['App · Windows · Event Memory', 'App · Windows · Event Memory · Development',
+      'Product that collects the internal life of the University of Pedagogical Sciences “José de la Luz y Caballero”.'],
+    es: ['App · Windows · Memoria de eventos', 'App · Windows · Memoria de eventos · Desarrollo',
+      'Producto que recoge la vida interna de la Universidad de Ciencias Pedagógicas «José de la Luz y Caballero».'],
+    pt: ['App · Windows · Memória de eventos', 'App · Windows · Memória de eventos · Desenvolvimento',
+      'Produto que reúne a vida interna da Universidade de Ciências Pedagógicas “José de la Luz y Caballero”.'],
+  },
+  forum: {
+    en: ['Deployment · Support', 'Deployment · Support',
+      'University of Holguin Forum Platform. Here I helped in the deployment and support of this platform.'],
+    es: ['Despliegue · Soporte', 'Despliegue · Soporte',
+      'Plataforma de foros de la Universidad de Holguín. Participé en el despliegue y el soporte de esta plataforma.'],
+    pt: ['Implantação · Suporte', 'Implantação · Suporte',
+      'Plataforma de fóruns da Universidade de Holguín. Atuei na implantação e no suporte desta plataforma.'],
+  },
+  dictionary: {
+    en: ['App · Android', 'App · Android · Development',
+      'This mobile application presents the enriched and contextualized content of the writer Ramiro Valdéz Galarraga.'],
+    es: ['App · Android', 'App · Android · Desarrollo',
+      'Esta aplicación móvil presenta el contenido enriquecido y contextualizado del escritor Ramiro Valdés Galarraga.'],
+    pt: ['App · Android', 'App · Android · Desenvolvimento',
+      'Este aplicativo móvel apresenta o conteúdo enriquecido e contextualizado do escritor Ramiro Valdés Galarraga.'],
+  },
+};
+
+for (const [id, langs] of Object.entries(PROJECTS)) {
+  for (const [code, [sub, cats, desc]] of Object.entries(langs)) {
+    Object.assign(dict[code], {
+      [`proj.${id}.sub`]: sub,
+      [`proj.${id}.cats`]: cats,
+      [`proj.${id}.desc`]: desc,
+    });
+  }
+}
+
 const STORE_KEY = 'tc-lang';
 
 /** Resolve the initial language: saved choice → legacy key → browser → en. */

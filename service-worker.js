@@ -5,10 +5,11 @@
  *   navigations   network-first → cached page → cached "/" → offline.html
  *   css / js      stale-while-revalidate (instant, refreshed in background)
  *   images        cache-first, filled on demand
+ *   cv/*.pdf      cache-first after first download
  *   cross-origin  untouched (never cached)
  */
 
-const VERSION = 'v5';
+const VERSION = 'v6';
 const CACHE_NAME = `portfolio-core-${VERSION}`;
 const IMAGE_CACHE = `portfolio-images-${VERSION}`;
 
@@ -30,24 +31,11 @@ const CORE_ASSETS = [
   '/images/profile.png',
 ];
 
-// Project artwork is pre-cached too, so the whole portfolio works offline.
-const PROJECT_IMAGES = [
-  '/images/projects/photon-json.jpg',
-  '/images/projects/drag-drop-ide.jpg',
-  '/images/projects/tiny-color.jpg',
-  '/images/projects/touch-gestures.jpg',
-  '/images/projects/dev-guides.jpg',
-  '/images/projects/accreditation-uho.jpg',
-  '/images/projects/forum-uho.jpg',
-  '/images/projects/DPM.jpg',
-];
-
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    Promise.all([
-      caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)),
-      caches.open(IMAGE_CACHE).then((cache) => cache.addAll(PROJECT_IMAGES)),
-    ]).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(CORE_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
