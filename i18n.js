@@ -416,11 +416,11 @@ const PROJECTS = {
   },
   tinycolor: {
     en: ['Library · Development', 'Library · Development',
-      "This LiveCode Script library is based on Brian Grinstead's TinyColor v1.4.2 micro-framework, which was translated into LiveCode Script by the FerrusLogic team."],
+      "This LiveCode Script library is based on Brian Grinstead's TinyColor v1.4.2 micro-framework, which was translated into LiveCode Script by the DTByte Ltd team."],
     es: ['Librería · Desarrollo', 'Librería · Desarrollo',
-      'Esta librería de LiveCode Script se basa en el micro-framework TinyColor v1.4.2 de Brian Grinstead, traducido a LiveCode Script por el equipo de FerrusLogic.'],
+      'Esta librería de LiveCode Script se basa en el micro-framework TinyColor v1.4.2 de Brian Grinstead, traducido a LiveCode Script por el equipo de DTByte Ltd.'],
     pt: ['Biblioteca · Desenvolvimento', 'Biblioteca · Desenvolvimento',
-      'Esta biblioteca em LiveCode Script é baseada no micro-framework TinyColor v1.4.2 de Brian Grinstead, traduzido para LiveCode Script pela equipe FerrusLogic.'],
+      'Esta biblioteca em LiveCode Script é baseada no micro-framework TinyColor v1.4.2 de Brian Grinstead, traduzido para LiveCode Script pela equipe DTByte Ltd.'],
   },
   touchgestures: {
     en: ['Library · Development', 'Library · Development',

@@ -70,7 +70,7 @@ T = {
             ('touchGestures', 'Library for handling finger gestures on touch screens.'),
             ('Drag Drop Files into IDE', 'Plugin to drag images, video, SVG and text into any open LiveCode IDE window.'),
         ],
-        'oss_note': 'Open source under github.com/Ferruslogic',
+        'oss_note': 'Open source under github.com/dtbyte-Ltd',
         'skills': [
             ('Web', 'JavaScript, TypeScript, HTML5, CSS3, PHP, CodeIgniter, Vue.js, Angular, Astro, Tailwind CSS, WordPress'),
             ('Cross-platform', 'LiveCode, .NET Core / C#, Flutter / Dart'),
@@ -123,7 +123,7 @@ T = {
             ('touchGestures', 'Librería para gestionar gestos táctiles en pantallas.'),
             ('Drag Drop Files into IDE', 'Plugin para arrastrar imágenes, vídeo, SVG y texto a cualquier ventana abierta del IDE de LiveCode.'),
         ],
-        'oss_note': 'Código abierto en github.com/Ferruslogic',
+        'oss_note': 'Código abierto en github.com/dtbyte-Ltd',
         'skills': [
             ('Web', 'JavaScript, TypeScript, HTML5, CSS3, PHP, CodeIgniter, Vue.js, Angular, Astro, Tailwind CSS, WordPress'),
             ('Multiplataforma', 'LiveCode, .NET Core / C#, Flutter / Dart'),
@@ -176,7 +176,7 @@ T = {
             ('touchGestures', 'Biblioteca para tratar gestos de toque em telas.'),
             ('Drag Drop Files into IDE', 'Plugin para arrastar imagens, vídeo, SVG e texto para qualquer janela aberta do IDE LiveCode.'),
         ],
-        'oss_note': 'Código aberto em github.com/Ferruslogic',
+        'oss_note': 'Código aberto em github.com/dtbyte-Ltd',
         'skills': [
             ('Web', 'JavaScript, TypeScript, HTML5, CSS3, PHP, CodeIgniter, Vue.js, Angular, Astro, Tailwind CSS, WordPress'),
             ('Multiplataforma', 'LiveCode, .NET Core / C#, Flutter / Dart'),
