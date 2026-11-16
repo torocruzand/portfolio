@@ -1,201 +1,43 @@
-# Andrés - Portfolio Website
+# torocruzand.com — The Living Compiler & Telemetry HUD
 
-An elegant, creative portfolio website with dark/light mode, multi-language support, and smooth animations.
+Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependencies: hand-written HTML5, CSS and ES modules. No build step, no runtime packages.
 
-## ✨ Features
+## Architecture
 
-- 🎨 **Elegant Dark Theme** with light mode support
-- 🌍 **Multi-language Support** (English, Spanish, Brazilian Portuguese)
-- ✨ **Smooth Animations** and scroll effects
-- 📱 **Fully Responsive** design (mobile, tablet, desktop)
-- 🚀 **Fast & Lightweight** - No frameworks, pure HTML/CSS/JS
-- 🎭 **Interactive Elements** with hover effects
-- 📊 **Project Showcase** with 8 featured projects
-- ⏱️ **Professional Timeline** for experience
-- 💼 **Modern UI/UX** with gradient accents
+| File | Role |
+| --- | --- |
+| `index.html` | Semantic document: HUD header and footer, six `<section aria-labelledby>` regions (hello, about, projects, experience, skills, contact), JSON-LD (`Person`, `ProfilePage` listing each public project), `<dialog>` terminal |
+| `styles.css` | `@layer reset, tokens, layout, components, utilities, animations`; carbon and paper-blueprint themes; exposed 12-column grid; scroll-driven animations; print stylesheet |
+| `main.js` | Single `requestAnimationFrame` engine driving the canvas lattice, telemetry, kinetic headline, reticle cursor and magnetic springs. Also contains the X-ray state machine, CLI and vim navigation, Web Audio synth and theme switching |
+| `service-worker.js` | Offline shell (`offline.html`) |
 
-## 🚀 Quick Start
+### Runtime layers
 
-### Option 1: GitHub Pages (Recommended)
+1. **Canvas lattice** (`#lattice`, decorative, `aria-hidden`): a spring mesh with animated blocks and data packets. It reacts to cursor velocity and scroll momentum.
+2. **Semantic DOM**: every word and link is real HTML, readable by screen readers and crawlers.
 
-1. **Create a new repository** on GitHub
-   - Name it: `yourusername.github.io` (replace `yourusername` with your GitHub username)
-   - Set it to Public
+### Interactions
 
-2. **Upload files** to your repository:
-   - `index.html`
-   - `styles.css`
-   - `script.js`
-   - `README.md`
+- `⌘/Ctrl + K` or `~` opens the terminal. Commands: `help`, `ls`, `inspect <module>`, `xray on|off`, `goto <section>`, `theme blueprint|carbon`, `sound on|off`, `run benchmark`, `whoami`, `contact`, `stats`, `clear`, `exit`.
+- `j` / `k` step through sections and modules. `x` toggles the X-ray on the focused module. `gg` jumps to the top and `G` to the bottom. `?` opens help.
+- Each project has a **Preview ⇄ Spec** switch. The spec face shows its technologies, categories and download/source links.
 
-3. **Enable GitHub Pages**:
-   - Go to repository Settings
-   - Scroll to "Pages" section
-   - Under "Source", select `main` branch
-   - Click Save
+### Performance & accessibility
 
-4. **Visit your site**:
-   - Your portfolio will be live at: `https://yourusername.github.io`
-   - It may take a few minutes to deploy
+- All loops pause when `document.hidden` is true. The canvas also pauses when an `IntersectionObserver` reports it off screen. Visual systems start in `requestIdleCallback`.
+- `prefers-reduced-motion: reduce` switches to **Static Schematic** mode: one frame is drawn, there is no loop, no reticle and no transitions. The switch happens live.
+- The theme is set before first paint, so there is no flash and no layout shift. System fonts only, so no font requests.
 
-### Option 2: Local Development
+## Local development
 
-1. **Download the files** to a folder on your computer
-
-2. **Open in browser**:
-   - Double-click `index.html`
-   - Or use a local server (recommended):
-     ```bash
-     # Using Python 3
-     python -m http.server 8000
-     
-     # Using Python 2
-     python -m SimpleHTTPServer 8000
-     
-     # Using Node.js http-server
-     npx http-server
-     ```
-
-3. **Visit**: `http://localhost:8000`
-
-## 🎨 Customization
-
-### Changing Colors
-
-Edit the CSS variables in `styles.css`:
-
-```css
-:root {
-    --accent-primary: #667eea;  /* Change primary color */
-    --accent-secondary: #764ba2; /* Change secondary color */
-}
+```bash
+python3 -m http.server 8000
 ```
 
-### Adding/Editing Projects
+Open `http://localhost:8000`. ES modules need a server; `file://` will not work.
 
-Edit the `projects` array in `script.js`:
+## Editing content
 
-```javascript
-const projects = [
-    {
-        name: "Project Name",
-        description: "Project description",
-        image: "https://your-image-url.jpg",
-        web: "https://project-url.com",
-        download: "https://download-url.zip",
-        github: "https://github.com/username/repo",
-        technologies: ["Tech1", "Tech2"],
-        categories: ["Category1", "Category2"]
-    },
-    // Add more projects...
-];
-```
-
-### Updating Personal Information
-
-1. **Hero Section** - Edit in `index.html`:
-   - Line 41-43: Name and title
-   - Line 44-46: Description
-
-2. **About Section** - Edit in `index.html`:
-   - Lines 114-126: About paragraphs
-   - Lines 130-144: Statistics
-
-3. **Experience Timeline** - Edit in `index.html`:
-   - Lines 252-318: Experience entries
-
-4. **Contact Information** - Update:
-   - Social media links (lines 67-88)
-   - Contact cards (lines 326-364)
-
-### Language Translations
-
-Edit the `translations` object in `script.js`:
-
-```javascript
-const translations = {
-    en: { /* English translations */ },
-    es: { /* Spanish translations */ },
-    pt: { /* Portuguese translations */ }
-};
-```
-
-## 📂 File Structure
-
-```
-portfolio/
-│
-├── index.html          # Main HTML file
-├── styles.css          # All styles and animations
-├── script.js           # JavaScript functionality
-└── README.md          # This file
-```
-
-## 🌐 Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 🎯 Sections
-
-1. **Hero** - Welcome section with name and introduction
-2. **About** - Personal bio and statistics
-3. **Skills** - Technologies organized by category
-4. **Projects** - Featured projects with links
-5. **Experience** - Professional timeline
-6. **Contact** - Contact methods and social links
-7. **Footer** - Copyright and quick links
-
-## ⚙️ Technologies Used
-
-- HTML5
-- CSS3 (with CSS Grid & Flexbox)
-- Vanilla JavaScript (ES6+)
-- Google Fonts (Inter & Space Grotesk)
-- SVG Icons
-
-## 📱 Responsive Breakpoints
-
-- Desktop: 1024px and above
-- Tablet: 768px - 1023px
-- Mobile: Below 768px
-
-## 🎨 Design Features
-
-- **Gradient Orbs** - Animated background elements
-- **Glass-morphism** - Modern card designs
-- **Smooth Scrolling** - Enhanced navigation
-- **Intersection Observer** - Scroll animations
-- **Parallax Effects** - Depth and movement
-- **Micro-interactions** - Button and link animations
-
-## 🔧 Customization Tips
-
-1. **Images**: Replace project images with your own URLs
-2. **Colors**: Use the CSS variables for consistent theming
-3. **Fonts**: Change Google Fonts in the `<head>` section
-4. **Animations**: Adjust timing in CSS keyframes
-5. **Content**: Update all text in HTML or translations in JS
-
-## 📄 License
-
-This portfolio template is free to use for personal projects. Feel free to customize it to match your style!
-
-## 🤝 Credits
-
-- Design & Development: Andrés
-- Fonts: Google Fonts (Inter, Space Grotesk)
-- Icons: Custom SVG icons
-
-## 📞 Support
-
-For questions or issues:
-- Email: torocruzand@gmail.com
-- GitHub: [@torocruzand](https://github.com/torocruzand)
-
----
-
-Made with ❤️ by Andrés
+- Projects: the `<article class="module">` blocks in `index.html`. Keep the matching JSON-LD entry in sync.
+- Content mirrors the public copy of torocruzand.com. Only list projects that are already public.
+- Terminal commands: `Terminal.defineCommands()` in `main.js`.
