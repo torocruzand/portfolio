@@ -224,7 +224,7 @@ def page(t):
 <main class="sheet">
   <aside class="side">
     <img class="photo" src="../../images/profile.png" alt="" width="120" height="120">
-    <h1>Andrés del Toro Cruz</h1>
+    <h1>Andres del Toro Cruz</h1>
     <p class="role">{e(t['title'])}</p>
     <p class="loc">{e(t['location'])}</p>
     <ul class="contact">{contact}</ul>
