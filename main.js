@@ -21,17 +21,64 @@
 
 'use strict';
 
-import { LANGS, detectLang, saveLang, applyLang, t } from './i18n.js';
+const LANGS = ['en', 'es', 'pt'];
 
-/** Active UI language (en | es | pt). `?lang=` in the URL wins once. */
-let lang = (() => {
+/** Language the HTML was rendered in: /es/ and /pt/ are pre-rendered, / is English. */
+const CONTENT_LANG = (() => {
   const seg = location.pathname.split('/')[1];
-  if (seg === 'es' || seg === 'pt') return seg;          // pre-rendered /es/ and /pt/
+  return seg === 'es' || seg === 'pt' ? seg : 'en';
+})();
+
+/** Saved choice → legacy key → browser language → English. */
+function detectLang() {
+  let saved = null;
+  try { saved = localStorage.getItem('tc-lang') || localStorage.getItem('preferredLanguage'); } catch { /* no storage */ }
+  if (LANGS.includes(saved)) return saved;
+  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return LANGS.includes(nav) ? nav : 'en';
+}
+
+function saveLang(code) {
+  try { localStorage.setItem('tc-lang', code); } catch { /* no storage */ }
+}
+
+/** Active UI language. The URL path wins, then ?lang=, then the saved/browser preference. */
+let lang = (() => {
+  if (CONTENT_LANG !== 'en') return CONTENT_LANG;
   const q = new URLSearchParams(location.search).get('lang');
   return LANGS.includes(q) ? q : detectLang();
 })();
-/** Translate a key into the active language. */
-const L = (key) => t(lang, key);
+
+/**
+ * Interface strings used by scripts (toasts, status). Page copy lives in the
+ * HTML and in i18n.js, which is only fetched when the page has to be
+ * re-translated in place — pre-rendered pages never download it.
+ */
+const UI = {
+  en: {
+    'toast.blueprint': 'Paper blueprint mode', 'toast.carbon': 'Carbon telemetry mode',
+    'toast.audioOn': 'Audio armed', 'toast.audioOff': 'Audio muted', 'toast.lang': 'Language: English',
+    'toast.installed': 'Installed as an app', 'toast.offline': 'Offline — serving cached copy',
+    'toast.online': 'Back online', 'hud.status': 'SYS.NOMINAL', 'hud.offline': 'OFFLINE · CACHED',
+  },
+  es: {
+    'toast.blueprint': 'Modo plano en papel', 'toast.carbon': 'Modo telemetría carbono',
+    'toast.audioOn': 'Audio activado', 'toast.audioOff': 'Audio silenciado', 'toast.lang': 'Idioma: Español',
+    'toast.installed': 'Instalado como aplicación', 'toast.offline': 'Sin conexión — mostrando copia en caché',
+    'toast.online': 'Conexión restablecida', 'hud.status': 'SIS.NOMINAL', 'hud.offline': 'SIN CONEXIÓN · CACHÉ',
+  },
+  pt: {
+    'toast.blueprint': 'Modo planta em papel', 'toast.carbon': 'Modo telemetria carbono',
+    'toast.audioOn': 'Áudio ativado', 'toast.audioOff': 'Áudio mudo', 'toast.lang': 'Idioma: Português',
+    'toast.installed': 'Instalado como aplicativo', 'toast.offline': 'Offline — exibindo cópia em cache',
+    'toast.online': 'Conexão restabelecida', 'hud.status': 'SIS.NOMINAL', 'hud.offline': 'OFFLINE · CACHE',
+  },
+};
+const L = (key) => UI[lang]?.[key] ?? UI.en[key] ?? key;
+
+/** Lazily loads the full dictionary (≈28 KB) only when the DOM must be re-translated. */
+let i18nModule = null;
+const loadI18n = () => (i18nModule ??= import('/i18n.js'));
 
 /* =========================================================================
    0. Environment & helpers
@@ -1401,6 +1448,7 @@ function bootLog() {
 class Language {
   constructor() {
     this.buttons = $$('.lang-switch [data-lang]');
+    this.rendered = CONTENT_LANG; // language the DOM currently shows
     this.buttons.forEach((b) => b.addEventListener('click', () => this.set(b.dataset.lang, true)));
     this.set(lang, false);
   }
@@ -1408,9 +1456,20 @@ class Language {
   /** @param {string} next @param {boolean} announce */
   set(next, announce) {
     if (!LANGS.includes(next)) return;
+    const changed = next !== this.rendered;
     lang = next;
     saveLang(next);
-    applyLang(next);
+    if (changed) {
+      // Re-translate in place; the dictionary is fetched on first use only.
+      loadI18n().then((m) => {
+        if (lang !== next) return;
+        m.applyLang(next);
+        this.rendered = next;
+        document.dispatchEvent(new CustomEvent('langchange', { detail: next }));
+      });
+    } else {
+      document.documentElement.lang = next === 'pt' ? 'pt-BR' : next;
+    }
     this.buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === next)));
     // CV links always point at the PDF in the active language.
     $$('[data-cv]').forEach((a) => {
