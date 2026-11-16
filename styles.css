@@ -593,6 +593,77 @@
     }
   }
 
+  /* ---------- Language switch (segmented, TE-style) ---------- */
+  .lang-switch {
+    display: inline-flex;
+    height: 32px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+  }
+
+  .lang-switch button {
+    min-width: 30px;
+    padding-inline: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    transition: background var(--dur-fast), color var(--dur-fast);
+  }
+
+  .lang-switch button + button {
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .lang-switch button:hover {
+    color: var(--ink);
+  }
+
+  .lang-switch button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .is-standalone #install-btn {
+    display: none;
+  }
+
+  .nav a b {
+    font-weight: inherit;
+    white-space: nowrap;
+  }
+
+  /* Translated labels run longer: drop section numbers until there's room. */
+  @media (max-width: 1599px) {
+    .nav a span {
+      display: none;
+    }
+
+    .nav ol {
+      gap: clamp(12px, 1.2vw, 20px);
+    }
+  }
+
+  /* Phone header: icon-only brand so every control fits at 320px+. */
+  @media (max-width: 479px) {
+    .brand {
+      grid-column: 1 / span 1;
+    }
+
+    .brand > span:not(.brand-sub) {
+      display: none;
+    }
+
+    .hud-controls {
+      grid-column: 2 / -1;
+      gap: 4px;
+    }
+
+    .hud-btn {
+      padding-inline: 7px;
+    }
+  }
+
   /* ---------- HUD footer ---------- */
   .hud-foot {
     position: fixed;
@@ -781,6 +852,14 @@
     text-transform: none;
   }
 
+  @media (max-width: 639px) {
+    .mega .tag {
+      display: block;
+      margin: 0.5em 0 0.3em;
+      font-size: 11px;
+    }
+  }
+
   .mega .glyph {
     display: inline-block;
     will-change: transform;
@@ -810,6 +889,14 @@
 
   .spec dd {
     font-size: var(--fs-body);
+  }
+
+  .boot-lede {
+    grid-column: 1 / -1;
+    max-width: 46ch;
+    font-size: var(--fs-lead);
+    line-height: 1.4;
+    color: var(--ink-muted);
   }
 
   .compile-log {
@@ -887,6 +974,10 @@
   }
 
   @media (min-width: 640px) {
+    .boot-lede {
+      grid-column: 1 / span 6;
+    }
+
     .spec {
       grid-column: 1 / span 5;
     }
@@ -1169,6 +1260,25 @@
     color: var(--ink);
   }
 
+  .bp-metrics .span {
+    grid-column: 1 / -1;
+  }
+
+  .bp-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+
+  .bp-links a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .bp-links a:hover {
+    color: var(--accent-ink);
+  }
+
   .module-body {
     padding: 0 16px 16px;
     display: grid;
@@ -1373,7 +1483,7 @@
     line-height: 1.05;
   }
 
-  .commit h3 span {
+  .commit h3 > span:not(.t) {
     display: block;
     font-family: var(--font-mono);
     font-size: var(--fs-small);

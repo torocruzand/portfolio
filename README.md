@@ -9,7 +9,9 @@ Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependenc
 | `index.html` | Semantic document: HUD header and footer, six `<section aria-labelledby>` regions (hello, about, projects, experience, skills, contact), JSON-LD (`Person`, `ProfilePage` listing each public project), `<dialog>` terminal |
 | `styles.css` | `@layer reset, tokens, layout, components, utilities, animations`; carbon and paper-blueprint themes; exposed 12-column grid; scroll-driven animations; print stylesheet |
 | `main.js` | Single `requestAnimationFrame` engine driving the canvas lattice, telemetry, kinetic headline, reticle cursor and magnetic springs. Also contains the X-ray state machine, CLI and vim navigation, Web Audio synth and theme switching |
-| `service-worker.js` | Offline shell (`offline.html`) |
+| `i18n.js` | EN / ES / PT-BR dictionary (mirrors the live-site copy), language detection and `applyLang()` |
+| `service-worker.js` | PWA caching: network-first pages, stale-while-revalidate CSS/JS, pre-cached images, `offline.html` fallback |
+| `manifest.webmanifest` | Installable PWA: id, standalone display, PNG + maskable icons, shortcuts |
 
 ### Runtime layers
 
@@ -18,7 +20,7 @@ Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependenc
 
 ### Interactions
 
-- `⌘/Ctrl + K` or `~` opens the terminal. Commands: `help`, `ls`, `inspect <module>`, `xray on|off`, `goto <section>`, `theme blueprint|carbon`, `sound on|off`, `run benchmark`, `whoami`, `contact`, `stats`, `clear`, `exit`.
+- `⌘/Ctrl + K` or `~` opens the terminal. Commands: `help`, `ls`, `inspect <module>`, `xray on|off`, `goto <section>`, `theme blueprint|carbon`, `lang en|es|pt`, `install`, `sound on|off`, `run benchmark`, `whoami`, `contact`, `stats`, `clear`, `exit`.
 - `j` / `k` step through sections and modules. `x` toggles the X-ray on the focused module. `gg` jumps to the top and `G` to the bottom. `?` opens help.
 - Each project has a **Preview ⇄ Spec** switch. The spec face shows its technologies, categories and download/source links.
 
@@ -27,6 +29,11 @@ Personal portfolio of **Andrés del Toro Cruz** (`@TOROCRUZAND`). Zero dependenc
 - All loops pause when `document.hidden` is true. The canvas also pauses when an `IntersectionObserver` reports it off screen. Visual systems start in `requestIdleCallback`.
 - `prefers-reduced-motion: reduce` switches to **Static Schematic** mode: one frame is drawn, there is no loop, no reticle and no transitions. The switch happens live.
 - The theme is set before first paint, so there is no flash and no layout shift. System fonts only, so no font requests.
+
+### Languages & PWA
+
+- The EN / ES / PT switch in the header translates every `data-i18n` node, updates `<html lang>` and the title, and keeps `?lang=es|pt` in the URL. The choice is saved per visitor.
+- The site installs as an app (Install button or browser menu) and works fully offline once visited.
 
 ## Local development
 

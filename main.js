@@ -21,6 +21,16 @@
 
 'use strict';
 
+import { LANGS, detectLang, saveLang, applyLang, t } from './i18n.js';
+
+/** Active UI language (en | es | pt). `?lang=` in the URL wins once. */
+let lang = (() => {
+  const q = new URLSearchParams(location.search).get('lang');
+  return LANGS.includes(q) ? q : detectLang();
+})();
+/** Translate a key into the active language. */
+const L = (key) => t(lang, key);
+
 /* =========================================================================
    0. Environment & helpers
    ========================================================================= */
@@ -905,7 +915,7 @@ class Theme {
     synth.play('clack');
     if (document.startViewTransition && !state.staticMode) document.startViewTransition(apply);
     else apply();
-    toast(theme === 'blueprint' ? 'Paper blueprint mode' : 'Carbon telemetry mode');
+    toast(L(theme === 'blueprint' ? 'toast.blueprint' : 'toast.carbon'));
     return true;
   }
 }
@@ -1045,6 +1055,23 @@ class Terminal {
           this.benchmark();
         },
       },
+      lang: {
+        args: 'en|es|pt',
+        desc: 'switch language (English, Español, Português)',
+        complete: [...LANGS],
+        run: (arg) => {
+          if (!LANGS.includes(arg)) return this.print('usage: lang en|es|pt', 'err');
+          ctx.setLang(arg);
+          this.print(`lang → ${arg}`, 'ok');
+        },
+      },
+      install: {
+        desc: 'install this site as an app (PWA)',
+        run: () => {
+          if (ctx.install()) this.print('install prompt opened', 'ok');
+          else this.print('install not available here (already installed, or use the browser menu → Install / Add to Home Screen)', 'dim');
+        },
+      },
       whoami: {
         desc: 'identity record',
         run: () => this.print([
@@ -1105,7 +1132,7 @@ class Terminal {
     synth.play('confirm');
     if (!this.booted) {
       this.booted = true;
-      this.print('TTY0 attached. type `help` — or try `inspect pixelcrush`, `run benchmark`, `theme blueprint`.', 'dim');
+      this.print('TTY0 attached. type `help` — or try `inspect photonjson`, `lang es`, `theme blueprint`.', 'dim');
     }
     this.renderSuggestions('');
     this.input.focus();
@@ -1163,7 +1190,7 @@ class Terminal {
   }
 
   renderSuggestions(value) {
-    const list = value ? this.candidates(value) : ['help', 'ls', 'inspect pixelcrush', 'run benchmark', 'theme blueprint', 'contact'];
+    const list = value ? this.candidates(value) : ['help', 'ls', 'inspect photonjson', 'lang es', 'lang pt', 'theme blueprint', 'contact'];
     this.suggest.textContent = '';
     list.slice(0, 8).forEach((text, i) => {
       const b = document.createElement('button');
@@ -1351,11 +1378,114 @@ function bootLog() {
 }
 
 /* =========================================================================
-   15. Service worker (offline shell)
+   15. Language switcher (EN / ES / PT-BR)
    ========================================================================= */
 
+class Language {
+  constructor() {
+    this.buttons = $$('.lang-switch [data-lang]');
+    this.buttons.forEach((b) => b.addEventListener('click', () => this.set(b.dataset.lang, true)));
+    this.set(lang, false);
+  }
+
+  /** @param {string} next @param {boolean} announce */
+  set(next, announce) {
+    if (!LANGS.includes(next)) return;
+    lang = next;
+    saveLang(next);
+    applyLang(next);
+    this.buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === next)));
+    // Keep a shareable, crawlable URL without reloading.
+    const url = new URL(location.href);
+    if (next === 'en') url.searchParams.delete('lang');
+    else url.searchParams.set('lang', next);
+    history.replaceState(history.state, '', url);
+    if (announce) {
+      synth.play('clack');
+      toast(L('toast.lang'));
+    }
+  }
+}
+
+/* =========================================================================
+   16. PWA — service worker, install prompt, connectivity
+   ========================================================================= */
+
+class PWA {
+  constructor(telemetry) {
+    this.deferred = null;
+    this.btn = $('#install-btn');
+    this.telemetry = telemetry;
+
+    // Chromium fires this when the manifest + SW make the site installable.
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.deferred = e;
+      if (this.btn) this.btn.hidden = false;
+    });
+    window.addEventListener('appinstalled', () => {
+      this.deferred = null;
+      if (this.btn) this.btn.hidden = true;
+      toast(L('toast.installed'));
+    });
+    this.btn?.addEventListener('click', () => this.prompt());
+
+    // Standalone launch: hide the install affordance entirely.
+    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+      document.documentElement.classList.add('is-standalone');
+    }
+
+    window.addEventListener('online', () => this.syncNetwork(true));
+    window.addEventListener('offline', () => this.syncNetwork(true));
+    this.syncNetwork(false);
+
+    this.register();
+  }
+
+  /** @returns {boolean} whether a native install prompt was shown */
+  prompt() {
+    if (!this.deferred) return false;
+    this.deferred.prompt();
+    this.deferred.userChoice.finally(() => {
+      this.deferred = null;
+      if (this.btn) this.btn.hidden = true;
+    });
+    return true;
+  }
+
+  syncNetwork(announce) {
+    const offline = !navigator.onLine;
+    document.documentElement.classList.toggle('is-offline', offline);
+    const status = $('#f-status');
+    if (status) {
+      status.dataset.i18n = offline ? 'hud.offline' : 'hud.status';
+      status.textContent = L(status.dataset.i18n);
+    }
+    if (announce) toast(L(offline ? 'toast.offline' : 'toast.online'));
+  }
+
+  register() {
+    // Secure contexts include https: and http://localhost during development.
+    if (!('serviceWorker' in navigator) || !window.isSecureContext) return;
+    const go = () => this.registerNow();
+    if (document.readyState === 'complete') go();
+    else window.addEventListener('load', go, { once: true });
+  }
+
+  registerNow() {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      // A new worker took over after an update: reload once to pick up assets.
+      if (refreshing || !this.hadController) return;
+      refreshing = true;
+      location.reload();
+    });
+    this.hadController = !!navigator.serviceWorker.controller;
+    registerServiceWorker();
+  }
+}
+
 function registerServiceWorker() {
-  if (!('serviceWorker' in navigator) || location.protocol !== 'https:') return;
   navigator.serviceWorker.register('service-worker.js').then((reg) => {
     reg.update();
     if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
@@ -1371,10 +1501,13 @@ function registerServiceWorker() {
 }
 
 /* =========================================================================
-   16. Bootstrap
+   17. Bootstrap
    ========================================================================= */
 
 function main() {
+  // Translate first so every later subsystem measures final text.
+  const language = new Language();
+
   initInput();
 
   const telemetry = engine.add(new Telemetry());
@@ -1404,11 +1537,15 @@ function main() {
   soundBtn?.setAttribute('aria-pressed', String(synth.enabled));
   soundBtn?.addEventListener('click', () => {
     setSound(!synth.enabled);
-    toast(synth.enabled ? 'Audio armed' : 'Audio muted');
+    toast(L(synth.enabled ? 'toast.audioOn' : 'toast.audioOff'));
   });
+
+  const pwa = new PWA(telemetry);
 
   const terminal = new Terminal({
     xray, theme, telemetry, setSound,
+    setLang: (l) => language.set(l, true),
+    install: () => pwa.prompt(),
     get lattice() { return lattice; },
   });
   new VimNav({ xray, terminal });
@@ -1461,8 +1598,6 @@ function main() {
   document.addEventListener('click', (e) => {
     if (e.target.closest('a[href], .key-cta, .hud-btn')) synth.play('tick');
   });
-
-  registerServiceWorker();
 }
 
 main();
